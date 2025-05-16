@@ -2,9 +2,17 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 ## Getting Started
 
-First, run the development server:
+Primero tener instalado node.js, instalar docker desktop.
+
+Segundo inicializar el docker-compose.yml 
+
+Tercero cargar las tablas del archivo sql.sql
+
+Para codigo vamos a usar postman para revisar la api
 
 ```bash
+npm i
+
 npm run dev
 # or
 yarn dev
