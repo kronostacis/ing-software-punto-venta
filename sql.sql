@@ -1,16 +1,59 @@
+-- BORRADO DE TABLAS (ORDEN CORRECTO)
 DROP TABLE IF EXISTS `Detalle_ventas_productos`;
 DROP TABLE IF EXISTS `Lote_productos`;
+DROP TABLE IF EXISTS `Estado_ventas`;
 DROP TABLE IF EXISTS `Ventas`;
 DROP TABLE IF EXISTS `Productos`;
 DROP TABLE IF EXISTS `Medio_pagos`;
+DROP TABLE IF EXISTS `Estado_usuarios`;
 DROP TABLE IF EXISTS `Usuarios`;
 DROP TABLE IF EXISTS `Cargos`;
+DROP TABLE IF EXISTS `Tipo_operacion`;
+DROP TABLE IF EXISTS `Cuentas`;
+DROP TABLE IF EXISTS `Operacion`;
 
-
+-- TABLAS
 CREATE TABLE `Cargos` (
     `Id_cargo` INT NOT NULL,
     `Nombre_cargo` VARCHAR(255),
     PRIMARY KEY (`Id_cargo`)
+);
+
+CREATE TABLE `Estado_usuarios` (
+    `Id_estado_usuario` INT NOT NULL,
+    `Nombre_estado_usuario` VARCHAR(255),
+    PRIMARY KEY (`Id_estado_usuario`)
+);
+
+CREATE TABLE `Estado_ventas` (
+    `Id_estado_venta` INT NOT NULL AUTO_INCREMENT,
+    `Nombre_estado_venta` VARCHAR(255),
+    PRIMARY KEY (`Id_estado_venta`)
+);
+
+CREATE TABLE `Tipo_operacion` (
+    `Id_tipo_operacion` INT NOT NULL,
+    `Nombre_operacion` VARCHAR(255),
+    PRIMARY KEY (`Id_tipo_operacion`)
+);
+
+CREATE TABLE `Cuentas` (
+    `Id_cuenta` INT NOT NULL,
+    `Nombre_cuenta` VARCHAR(255),
+    `Monto` INT,
+    PRIMARY KEY (`Id_cuenta`)
+);
+
+CREATE TABLE `Operacion` (
+    `Id_operacion` INT NOT NULL,
+    `Monto` INT,
+    `Fecha_operacion` DATE,
+    `Id_tipo_operacion` INT,
+    `Id_cuenta` INT,
+    `Descripcion` VARCHAR(255),
+    PRIMARY KEY (`Id_operacion`),
+    FOREIGN KEY (`Id_tipo_operacion`) REFERENCES `Tipo_operacion`(`Id_tipo_operacion`),
+    FOREIGN KEY (`Id_cuenta`) REFERENCES `Cuentas`(`Id_cuenta`)
 );
 
 CREATE TABLE `Usuarios` (
@@ -20,7 +63,9 @@ CREATE TABLE `Usuarios` (
     `Apellido_2` VARCHAR(80),
     `Contrasena` VARCHAR(255),
     `Cargo` INT,
+    `Id_estado_usuario` INT DEFAULT 1,
     PRIMARY KEY (`Id_usuario`),
+    FOREIGN KEY (`Id_estado_usuario`) REFERENCES `Estado_usuarios`(`Id_estado_usuario`),
     FOREIGN KEY (`Cargo`) REFERENCES `Cargos`(`Id_cargo`)
 );
 
@@ -43,10 +88,11 @@ CREATE TABLE `Ventas` (
     `Id_pago` INT,
     `Total_venta` DECIMAL(10,2),
     `Fecha_venta` DATETIME DEFAULT CURRENT_TIMESTAMP,
-    `Id_usuario` INT not NULL,
+    `Id_usuario` INT NOT NULL,
     `Utilidad_total` DECIMAL(10,2),
-
+    `Id_estado_venta` INT,
     PRIMARY KEY (`Id_venta`),
+    FOREIGN KEY (`Id_estado_venta`) REFERENCES `Estado_ventas`(`Id_estado_venta`),
     FOREIGN KEY (`Id_pago`) REFERENCES `Medio_pagos`(`Id_pago`),
     FOREIGN KEY (`Id_usuario`) REFERENCES `Usuarios`(`Id_usuario`)
 );
@@ -63,15 +109,16 @@ CREATE TABLE `Lote_productos` (
 );
 
 CREATE TABLE `Detalle_ventas_productos` (
-    `Id_ventas` INT,
+    `Id_venta` INT,
     `Id_producto` INT,
     `Cantidad` INT,
     `Precio_total` DECIMAL(10,2),
-    PRIMARY KEY (`Id_ventas`, `Id_producto`),
+    PRIMARY KEY (`Id_venta`, `Id_producto`),
     FOREIGN KEY (`Id_producto`) REFERENCES `Productos`(`Id_producto`),
-    FOREIGN KEY (`Id_ventas`) REFERENCES `Ventas`(`Id_venta`)
+    FOREIGN KEY (`Id_venta`) REFERENCES `Ventas`(`Id_venta`)
 );
 
+-- DATOS INICIALES
 INSERT INTO `Cargos` (`Id_cargo`, `Nombre_cargo`) VALUES
 (1, 'Administrador'),
 (2, 'Cajero'),
@@ -87,12 +134,25 @@ INSERT INTO `Medio_pagos` (`Id_pago`, `Nombre_pago`) VALUES
 (7, 'Transbank Credito Extranjero'),
 (8, 'Transbank Debito Extranjero');
 
+INSERT INTO `Estado_usuarios` (`Id_estado_usuario`, `Nombre_estado_usuario`) VALUES 
+(1, 'Activo'), 
+(0, 'Inactivo');
+
+INSERT INTO `Estado_ventas` (`Nombre_estado_venta`) VALUES
+('Pagada'),
+('Cancelada'),
+('Devuelta'),
+('Parcialmente pagada');
+
 INSERT INTO `Usuarios` (`Id_usuario`, `Nombre`, `Apellido_1`, `Apellido_2`, `Contrasena`, `Cargo`) VALUES
-(210463003, 'Benjamin', 'Villablanca', 'Zuñiga', '$argon2i$v=19$m=16,t=2,p=1$b2xCSFgxVzF1SnhZUGJySg$HYmqPvP8tXr0XqSptyFTrA', 1);
-(212058890, 'Diego', 'Muñoz', 'Sazo', '$argon2i$v=19$m=16,t=2,p=1$b2xCSFgxVzF1SnhZUGJySg$HYmqPvP8tXr0XqSptyFTrA', 1);
+(210463003, 'Benjamin', 'Villablanca', 'Zuñiga', '$argon2i$v=19$m=16,t=2,p=1$b2xCSFgxVzF1SnhZUGJySg$HYmqPvP8tXr0XqSptyFTrA', 1),
+(212058890, 'Diego', 'Muñoz', 'Sazo', '$argon2i$v=19$m=16,t=2,p=1$b2xCSFgxVzF1SnhZUGJySg$HYmqPvP8tXr0XqSptyFTrA', 1),
+(212322636, 'Esteban', 'Rojas', 'Calderon', '$argon2i$v=19$m=16,t=2,p=1$b2xCSFgxVzF1SnhZUGJySg$HYmqPvP8tXr0XqSptyFTrA', 1),
+(205329706, 'Cristobal', 'Artus', 'Scheel', '$argon2i$v=19$m=16,t=2,p=1$b2xCSFgxVzF1SnhZUGJySg$HYmqPvP8tXr0XqSptyFTrA', 1);
 
-
+-- TRIGGERS
 DELIMITER //
+
 CREATE TRIGGER actualizar_stock_producto
 AFTER INSERT ON Lote_productos
 FOR EACH ROW
@@ -107,11 +167,7 @@ BEGIN
     SET p.Stock = SumarStock.NuevoStock;
 END;
 //
-DELIMITER ;
 
-DELIMITER //
-
--- Trigger para actualizar el stock después de un DELETE en Lote_productos
 CREATE TRIGGER actualizar_stock_producto_despues_delete
 AFTER DELETE ON Lote_productos
 FOR EACH ROW
@@ -128,7 +184,6 @@ BEGIN
 END;
 //
 
--- Trigger para actualizar el stock después de un UPDATE en Lote_productos
 CREATE TRIGGER actualizar_stock_producto_despues_update
 AFTER UPDATE ON Lote_productos
 FOR EACH ROW
@@ -147,18 +202,13 @@ BEGIN
 END;
 //
 
-DELIMITER ;
-
 CREATE TRIGGER eliminar_detalle_y_venta
 BEFORE DELETE ON Ventas
 FOR EACH ROW
 BEGIN
-    -- Eliminar los detalles de la venta antes de eliminar la venta
     DELETE FROM Detalle_ventas_productos
     WHERE Id_venta = OLD.Id_venta;
-
-END$$
+END;
+//
 
 DELIMITER ;
-
-

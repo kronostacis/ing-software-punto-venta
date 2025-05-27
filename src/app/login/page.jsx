@@ -29,7 +29,7 @@ export default function LoginForm() {
         withCredentials: true,
       });
 
-      window.location.href = "/dashboard";
+      window.location.href = "/reportes";
       console.log("Login exitoso:");
       alert("Login exitoso");
     } catch (error) {
