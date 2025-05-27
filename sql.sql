@@ -1,16 +1,16 @@
 -- BORRADO DE TABLAS (ORDEN CORRECTO)
 DROP TABLE IF EXISTS `Detalle_ventas_productos`;
 DROP TABLE IF EXISTS `Lote_productos`;
-DROP TABLE IF EXISTS `Estado_ventas`;
 DROP TABLE IF EXISTS `Ventas`;
+DROP TABLE IF EXISTS `Estado_ventas`;
 DROP TABLE IF EXISTS `Productos`;
 DROP TABLE IF EXISTS `Medio_pagos`;
-DROP TABLE IF EXISTS `Estado_usuarios`;
 DROP TABLE IF EXISTS `Usuarios`;
+DROP TABLE IF EXISTS `Estado_usuarios`;
 DROP TABLE IF EXISTS `Cargos`;
+DROP TABLE IF EXISTS `Operacion`;
 DROP TABLE IF EXISTS `Tipo_operacion`;
 DROP TABLE IF EXISTS `Cuentas`;
-DROP TABLE IF EXISTS `Operacion`;
 
 -- TABLAS
 CREATE TABLE `Cargos` (
@@ -96,7 +96,7 @@ CREATE TABLE `Ventas` (
     FOREIGN KEY (`Id_pago`) REFERENCES `Medio_pagos`(`Id_pago`),
     FOREIGN KEY (`Id_usuario`) REFERENCES `Usuarios`(`Id_usuario`)
 );
-
+    
 CREATE TABLE `Lote_productos` (
     `Id_lote` INT NOT NULL AUTO_INCREMENT,
     `Id_producto` INT,
@@ -148,7 +148,26 @@ INSERT INTO `Usuarios` (`Id_usuario`, `Nombre`, `Apellido_1`, `Apellido_2`, `Con
 (210463003, 'Benjamin', 'Villablanca', 'Zuñiga', '$argon2i$v=19$m=16,t=2,p=1$b2xCSFgxVzF1SnhZUGJySg$HYmqPvP8tXr0XqSptyFTrA', 1),
 (212058890, 'Diego', 'Muñoz', 'Sazo', '$argon2i$v=19$m=16,t=2,p=1$b2xCSFgxVzF1SnhZUGJySg$HYmqPvP8tXr0XqSptyFTrA', 1),
 (212322636, 'Esteban', 'Rojas', 'Calderon', '$argon2i$v=19$m=16,t=2,p=1$b2xCSFgxVzF1SnhZUGJySg$HYmqPvP8tXr0XqSptyFTrA', 1),
+(205211667, 'Felipe', 'Ramos', 'Bustos', '$argon2i$v=19$m=16,t=2,p=1$b2xCSFgxVzF1SnhZUGJySg$HYmqPvP8tXr0XqSptyFTrA', 1),
 (205329706, 'Cristobal', 'Artus', 'Scheel', '$argon2i$v=19$m=16,t=2,p=1$b2xCSFgxVzF1SnhZUGJySg$HYmqPvP8tXr0XqSptyFTrA', 1);
+
+INSERT INTO Productos (Id_producto, Nombre, Precio_venta, Stock) VALUES
+(1, 'Camiseta', 15990, 120),
+(2, 'Pantalón', 29990, 80),
+(3, 'Zapatillas', 59990, 45),
+(4, 'Gorra', 9990, 100),
+(5, 'Chaqueta', 89500, 30);
+
+INSERT INTO Lote_productos (Id_producto, Precio_compra, Cantidad, Stock, Fecha) VALUES
+(1, 10000, 50, 50, '2025-05-01'),
+(1, 11000, 70, 70, '2025-05-20'),
+(2, 20000, 50, 50, '2025-05-05'),
+(2, 21500, 30, 30, '2025-05-22'),
+(3, 40000, 25, 25, '2025-05-10'),
+(3, 42000, 20, 20, '2025-05-24'),
+(4, 6000, 100, 100, '2025-05-15'),
+(5, 60000, 30, 30, '2025-05-18');
+
 
 -- TRIGGERS
 DELIMITER //
