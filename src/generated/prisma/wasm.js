@@ -125,11 +125,27 @@ exports.Prisma.CargosScalarFieldEnum = {
   Nombre_cargo: 'Nombre_cargo'
 };
 
+exports.Prisma.CuentasScalarFieldEnum = {
+  Id_cuenta: 'Id_cuenta',
+  Nombre_cuenta: 'Nombre_cuenta',
+  Monto: 'Monto'
+};
+
 exports.Prisma.Detalle_ventas_productosScalarFieldEnum = {
-  Id_ventas: 'Id_ventas',
+  Id_venta: 'Id_venta',
   Id_producto: 'Id_producto',
   Cantidad: 'Cantidad',
   Precio_total: 'Precio_total'
+};
+
+exports.Prisma.Estado_usuariosScalarFieldEnum = {
+  Id_estado_usuario: 'Id_estado_usuario',
+  Nombre_estado_usuario: 'Nombre_estado_usuario'
+};
+
+exports.Prisma.Estado_ventasScalarFieldEnum = {
+  Id_estado_venta: 'Id_estado_venta',
+  Nombre_estado_venta: 'Nombre_estado_venta'
 };
 
 exports.Prisma.Lote_productosScalarFieldEnum = {
@@ -146,11 +162,25 @@ exports.Prisma.Medio_pagosScalarFieldEnum = {
   Nombre_pago: 'Nombre_pago'
 };
 
+exports.Prisma.OperacionScalarFieldEnum = {
+  Id_operacion: 'Id_operacion',
+  Monto: 'Monto',
+  Fecha_operacion: 'Fecha_operacion',
+  Id_tipo_operacion: 'Id_tipo_operacion',
+  Id_cuenta: 'Id_cuenta',
+  Descripcion: 'Descripcion'
+};
+
 exports.Prisma.ProductosScalarFieldEnum = {
   Id_producto: 'Id_producto',
   Nombre: 'Nombre',
   Precio_venta: 'Precio_venta',
   Stock: 'Stock'
+};
+
+exports.Prisma.Tipo_operacionScalarFieldEnum = {
+  Id_tipo_operacion: 'Id_tipo_operacion',
+  Nombre_operacion: 'Nombre_operacion'
 };
 
 exports.Prisma.UsuariosScalarFieldEnum = {
@@ -159,7 +189,8 @@ exports.Prisma.UsuariosScalarFieldEnum = {
   Apellido_1: 'Apellido_1',
   Apellido_2: 'Apellido_2',
   Contrasena: 'Contrasena',
-  Cargo: 'Cargo'
+  Cargo: 'Cargo',
+  Id_estado_usuario: 'Id_estado_usuario'
 };
 
 exports.Prisma.VentasScalarFieldEnum = {
@@ -168,7 +199,8 @@ exports.Prisma.VentasScalarFieldEnum = {
   Total_venta: 'Total_venta',
   Fecha_venta: 'Fecha_venta',
   Id_usuario: 'Id_usuario',
-  Utilidad_total: 'Utilidad_total'
+  Utilidad_total: 'Utilidad_total',
+  Id_estado_venta: 'Id_estado_venta'
 };
 
 exports.Prisma.SortOrder = {
@@ -185,12 +217,32 @@ exports.Prisma.CargosOrderByRelevanceFieldEnum = {
   Nombre_cargo: 'Nombre_cargo'
 };
 
+exports.Prisma.CuentasOrderByRelevanceFieldEnum = {
+  Nombre_cuenta: 'Nombre_cuenta'
+};
+
+exports.Prisma.Estado_usuariosOrderByRelevanceFieldEnum = {
+  Nombre_estado_usuario: 'Nombre_estado_usuario'
+};
+
+exports.Prisma.Estado_ventasOrderByRelevanceFieldEnum = {
+  Nombre_estado_venta: 'Nombre_estado_venta'
+};
+
 exports.Prisma.Medio_pagosOrderByRelevanceFieldEnum = {
   Nombre_pago: 'Nombre_pago'
 };
 
+exports.Prisma.OperacionOrderByRelevanceFieldEnum = {
+  Descripcion: 'Descripcion'
+};
+
 exports.Prisma.ProductosOrderByRelevanceFieldEnum = {
   Nombre: 'Nombre'
+};
+
+exports.Prisma.Tipo_operacionOrderByRelevanceFieldEnum = {
+  Nombre_operacion: 'Nombre_operacion'
 };
 
 exports.Prisma.UsuariosOrderByRelevanceFieldEnum = {
@@ -203,10 +255,15 @@ exports.Prisma.UsuariosOrderByRelevanceFieldEnum = {
 
 exports.Prisma.ModelName = {
   Cargos: 'Cargos',
+  Cuentas: 'Cuentas',
   Detalle_ventas_productos: 'Detalle_ventas_productos',
+  Estado_usuarios: 'Estado_usuarios',
+  Estado_ventas: 'Estado_ventas',
   Lote_productos: 'Lote_productos',
   Medio_pagos: 'Medio_pagos',
+  Operacion: 'Operacion',
   Productos: 'Productos',
+  Tipo_operacion: 'Tipo_operacion',
   Usuarios: 'Usuarios',
   Ventas: 'Ventas'
 };

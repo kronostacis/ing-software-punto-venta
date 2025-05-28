@@ -9,7 +9,7 @@ export async function POST(request) {
   try {
     // 1. Verificar usuario en la base de datos
     const q = await query(
-      "SELECT Id_usuario, Nombre, Apellido_1, Cargo, Contrasena FROM Usuarios WHERE Id_usuario = ?",
+      "SELECT Id_usuario, Nombre, Apellido_1, Cargo, Contrasena, Id_estado_usuario FROM Usuarios WHERE Id_usuario = ?",
       [body.user]
     );
 
@@ -25,6 +25,12 @@ export async function POST(request) {
     // 2. Verificar contraseña con Argon2
     const passwordMatch = await argon2.verify(user.Contrasena, body.password);
 
+    if (user.Id_estado_usuario !== 1) {
+      return new Response(
+        JSON.stringify({ success: false, message: "Credenciales Invalidas" }),
+        { status: 403, headers: { "Content-Type": "application/json" } }
+      );
+    }
     if (!passwordMatch) {
       return new Response(
         JSON.stringify({ success: false, message: "Credenciales inválidas" }),
