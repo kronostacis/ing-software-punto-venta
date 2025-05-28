@@ -49,6 +49,18 @@ export async function getUserById(id) {
   return user;
 }
 
+export async function getUserHashById(id) {
+  const user = await prisma.usuarios.findUnique({
+    where: { Id_usuario: id },
+    select: {
+      Id_usuario: true,
+      Contrasena: true,
+    },
+  });
+
+  return user;
+}
+
 export async function deleteUserById(id) {
   try {
     const user = await prisma.usuarios.delete({
@@ -80,6 +92,26 @@ export async function updateUserById(id, data) {
   } catch (errors) {
     console.log(errors);
     return { success: false, message: "No se pudo actualizar el usuario" };
+  }
+}
+
+export async function updatePasswordUserById(id, data) {
+  try {
+    const { Contrasena } = data;
+    const user = await prisma.usuarios.update({
+      where: { Id_usuario: id },
+      data: {
+        Contrasena: Contrasena,
+      },
+    });
+
+    return { success: true, user: user };
+  } catch (errors) {
+    console.log(errors);
+    return {
+      success: false,
+      message: "No se pudo actualizar contraseña de usuario",
+    };
   }
 }
 

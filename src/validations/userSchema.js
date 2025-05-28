@@ -21,4 +21,17 @@ const UpdateUserSchema = yup.object({
   Cargo: yup.number().required("El cargo es obligatorio"),
 });
 
-export { CreateUserSchema, UpdateUserSchema };
+const ChangePasswordSchema = yup.object({
+  Contrasena: yup
+    .string()
+    .required("La contraseña es obligatorio")
+    .min(6)
+    .max(40),
+  Nueva_contrasena: yup
+    .string()
+    .required("La nueva contraseña es obligatorio")
+    .min(6)
+    .max(40),
+});
+
+export { CreateUserSchema, UpdateUserSchema, ChangePasswordSchema };
