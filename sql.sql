@@ -5,6 +5,7 @@ DROP TABLE IF EXISTS `Ventas`;
 DROP TABLE IF EXISTS `Estado_ventas`;
 DROP TABLE IF EXISTS `Productos`;
 DROP TABLE IF EXISTS `Medio_pagos`;
+DROP TABLE IF EXISTS `Estado_medios_pago`;
 DROP TABLE IF EXISTS `Usuarios`;
 DROP TABLE IF EXISTS `Estado_usuarios`;
 DROP TABLE IF EXISTS `Cargos`;
@@ -23,6 +24,12 @@ CREATE TABLE `Estado_usuarios` (
     `Id_estado_usuario` INT NOT NULL,
     `Nombre_estado_usuario` VARCHAR(255),
     PRIMARY KEY (`Id_estado_usuario`)
+);
+
+CREATE TABLE `Estado_medios_pago` (
+    `Id_estado_medio_pago` INT NOT NULL,
+    `Nombre_estado_medio_pago` VARCHAR(255),
+    PRIMARY KEY (`Id_estado_medio_pago`)
 );
 
 CREATE TABLE `Estado_ventas` (
@@ -72,7 +79,9 @@ CREATE TABLE `Usuarios` (
 CREATE TABLE `Medio_pagos` (
     `Id_pago` INT NOT NULL AUTO_INCREMENT,
     `Nombre_pago` VARCHAR(255),
-    PRIMARY KEY (`Id_pago`)
+    `Id_estado_medio_pago` INT DEFAULT 1,
+    PRIMARY KEY (`Id_pago`),
+    FOREIGN KEY (`Id_estado_medio_pago`) REFERENCES `Estado_medios_pago`(`Id_estado_medio_pago`)
 );
 
 CREATE TABLE `Productos` (
@@ -123,6 +132,10 @@ INSERT INTO `Cargos` (`Id_cargo`, `Nombre_cargo`) VALUES
 (1, 'Administrador'),
 (2, 'Cajero'),
 (3, 'Dueño');
+
+INSERT INTO Estado_medios_pago (Id_estado_medio_pago , Nombre_estado_medio_pago) VALUES 
+(1, 'Activo'), 
+(0, 'Inactivo');
 
 INSERT INTO `Medio_pagos` (`Id_pago`, `Nombre_pago`) VALUES
 (1, 'Efectivo'),

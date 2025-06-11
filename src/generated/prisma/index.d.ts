@@ -73,6 +73,11 @@ export type Usuarios = $Result.DefaultSelection<Prisma.$UsuariosPayload>
  * 
  */
 export type Ventas = $Result.DefaultSelection<Prisma.$VentasPayload>
+/**
+ * Model Estado_medios_pago
+ * 
+ */
+export type Estado_medios_pago = $Result.DefaultSelection<Prisma.$Estado_medios_pagoPayload>
 
 /**
  * ##  Prisma Client ʲˢ
@@ -318,6 +323,16 @@ export class PrismaClient<
     * ```
     */
   get ventas(): Prisma.VentasDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.estado_medios_pago`: Exposes CRUD operations for the **Estado_medios_pago** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Estado_medios_pagos
+    * const estado_medios_pagos = await prisma.estado_medios_pago.findMany()
+    * ```
+    */
+  get estado_medios_pago(): Prisma.Estado_medios_pagoDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -769,7 +784,8 @@ export namespace Prisma {
     Productos: 'Productos',
     Tipo_operacion: 'Tipo_operacion',
     Usuarios: 'Usuarios',
-    Ventas: 'Ventas'
+    Ventas: 'Ventas',
+    Estado_medios_pago: 'Estado_medios_pago'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -788,7 +804,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "cargos" | "cuentas" | "detalle_ventas_productos" | "estado_usuarios" | "estado_ventas" | "lote_productos" | "medio_pagos" | "operacion" | "productos" | "tipo_operacion" | "usuarios" | "ventas"
+      modelProps: "cargos" | "cuentas" | "detalle_ventas_productos" | "estado_usuarios" | "estado_ventas" | "lote_productos" | "medio_pagos" | "operacion" | "productos" | "tipo_operacion" | "usuarios" | "ventas" | "estado_medios_pago"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1584,6 +1600,72 @@ export namespace Prisma {
           }
         }
       }
+      Estado_medios_pago: {
+        payload: Prisma.$Estado_medios_pagoPayload<ExtArgs>
+        fields: Prisma.Estado_medios_pagoFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.Estado_medios_pagoFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$Estado_medios_pagoPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.Estado_medios_pagoFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$Estado_medios_pagoPayload>
+          }
+          findFirst: {
+            args: Prisma.Estado_medios_pagoFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$Estado_medios_pagoPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.Estado_medios_pagoFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$Estado_medios_pagoPayload>
+          }
+          findMany: {
+            args: Prisma.Estado_medios_pagoFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$Estado_medios_pagoPayload>[]
+          }
+          create: {
+            args: Prisma.Estado_medios_pagoCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$Estado_medios_pagoPayload>
+          }
+          createMany: {
+            args: Prisma.Estado_medios_pagoCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          delete: {
+            args: Prisma.Estado_medios_pagoDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$Estado_medios_pagoPayload>
+          }
+          update: {
+            args: Prisma.Estado_medios_pagoUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$Estado_medios_pagoPayload>
+          }
+          deleteMany: {
+            args: Prisma.Estado_medios_pagoDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.Estado_medios_pagoUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.Estado_medios_pagoUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$Estado_medios_pagoPayload>
+          }
+          aggregate: {
+            args: Prisma.Estado_medios_pagoAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateEstado_medios_pago>
+          }
+          groupBy: {
+            args: Prisma.Estado_medios_pagoGroupByArgs<ExtArgs>
+            result: $Utils.Optional<Estado_medios_pagoGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.Estado_medios_pagoCountArgs<ExtArgs>
+            result: $Utils.Optional<Estado_medios_pagoCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -1680,6 +1762,7 @@ export namespace Prisma {
     tipo_operacion?: Tipo_operacionOmit
     usuarios?: UsuariosOmit
     ventas?: VentasOmit
+    estado_medios_pago?: Estado_medios_pagoOmit
   }
 
   /* Types for Logging */
@@ -2054,6 +2137,37 @@ export namespace Prisma {
    */
   export type VentasCountOutputTypeCountDetalle_ventas_productosArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: Detalle_ventas_productosWhereInput
+  }
+
+
+  /**
+   * Count Type Estado_medios_pagoCountOutputType
+   */
+
+  export type Estado_medios_pagoCountOutputType = {
+    Medio_pagos: number
+  }
+
+  export type Estado_medios_pagoCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    Medio_pagos?: boolean | Estado_medios_pagoCountOutputTypeCountMedio_pagosArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * Estado_medios_pagoCountOutputType without action
+   */
+  export type Estado_medios_pagoCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Estado_medios_pagoCountOutputType
+     */
+    select?: Estado_medios_pagoCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * Estado_medios_pagoCountOutputType without action
+   */
+  export type Estado_medios_pagoCountOutputTypeCountMedio_pagosArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: Medio_pagosWhereInput
   }
 
 
@@ -7891,50 +8005,60 @@ export namespace Prisma {
 
   export type Medio_pagosAvgAggregateOutputType = {
     Id_pago: number | null
+    Id_estado_medio_pago: number | null
   }
 
   export type Medio_pagosSumAggregateOutputType = {
     Id_pago: number | null
+    Id_estado_medio_pago: number | null
   }
 
   export type Medio_pagosMinAggregateOutputType = {
     Id_pago: number | null
     Nombre_pago: string | null
+    Id_estado_medio_pago: number | null
   }
 
   export type Medio_pagosMaxAggregateOutputType = {
     Id_pago: number | null
     Nombre_pago: string | null
+    Id_estado_medio_pago: number | null
   }
 
   export type Medio_pagosCountAggregateOutputType = {
     Id_pago: number
     Nombre_pago: number
+    Id_estado_medio_pago: number
     _all: number
   }
 
 
   export type Medio_pagosAvgAggregateInputType = {
     Id_pago?: true
+    Id_estado_medio_pago?: true
   }
 
   export type Medio_pagosSumAggregateInputType = {
     Id_pago?: true
+    Id_estado_medio_pago?: true
   }
 
   export type Medio_pagosMinAggregateInputType = {
     Id_pago?: true
     Nombre_pago?: true
+    Id_estado_medio_pago?: true
   }
 
   export type Medio_pagosMaxAggregateInputType = {
     Id_pago?: true
     Nombre_pago?: true
+    Id_estado_medio_pago?: true
   }
 
   export type Medio_pagosCountAggregateInputType = {
     Id_pago?: true
     Nombre_pago?: true
+    Id_estado_medio_pago?: true
     _all?: true
   }
 
@@ -8027,6 +8151,7 @@ export namespace Prisma {
   export type Medio_pagosGroupByOutputType = {
     Id_pago: number
     Nombre_pago: string | null
+    Id_estado_medio_pago: number | null
     _count: Medio_pagosCountAggregateOutputType | null
     _avg: Medio_pagosAvgAggregateOutputType | null
     _sum: Medio_pagosSumAggregateOutputType | null
@@ -8051,6 +8176,8 @@ export namespace Prisma {
   export type Medio_pagosSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     Id_pago?: boolean
     Nombre_pago?: boolean
+    Id_estado_medio_pago?: boolean
+    Estado_medios_pago?: boolean | Medio_pagos$Estado_medios_pagoArgs<ExtArgs>
     Ventas?: boolean | Medio_pagos$VentasArgs<ExtArgs>
     _count?: boolean | Medio_pagosCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["medio_pagos"]>
@@ -8060,10 +8187,12 @@ export namespace Prisma {
   export type Medio_pagosSelectScalar = {
     Id_pago?: boolean
     Nombre_pago?: boolean
+    Id_estado_medio_pago?: boolean
   }
 
-  export type Medio_pagosOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"Id_pago" | "Nombre_pago", ExtArgs["result"]["medio_pagos"]>
+  export type Medio_pagosOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"Id_pago" | "Nombre_pago" | "Id_estado_medio_pago", ExtArgs["result"]["medio_pagos"]>
   export type Medio_pagosInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    Estado_medios_pago?: boolean | Medio_pagos$Estado_medios_pagoArgs<ExtArgs>
     Ventas?: boolean | Medio_pagos$VentasArgs<ExtArgs>
     _count?: boolean | Medio_pagosCountOutputTypeDefaultArgs<ExtArgs>
   }
@@ -8071,11 +8200,13 @@ export namespace Prisma {
   export type $Medio_pagosPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Medio_pagos"
     objects: {
+      Estado_medios_pago: Prisma.$Estado_medios_pagoPayload<ExtArgs> | null
       Ventas: Prisma.$VentasPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       Id_pago: number
       Nombre_pago: string | null
+      Id_estado_medio_pago: number | null
     }, ExtArgs["result"]["medio_pagos"]>
     composites: {}
   }
@@ -8416,6 +8547,7 @@ export namespace Prisma {
    */
   export interface Prisma__Medio_pagosClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    Estado_medios_pago<T extends Medio_pagos$Estado_medios_pagoArgs<ExtArgs> = {}>(args?: Subset<T, Medio_pagos$Estado_medios_pagoArgs<ExtArgs>>): Prisma__Estado_medios_pagoClient<$Result.GetResult<Prisma.$Estado_medios_pagoPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     Ventas<T extends Medio_pagos$VentasArgs<ExtArgs> = {}>(args?: Subset<T, Medio_pagos$VentasArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$VentasPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -8448,6 +8580,7 @@ export namespace Prisma {
   interface Medio_pagosFieldRefs {
     readonly Id_pago: FieldRef<"Medio_pagos", 'Int'>
     readonly Nombre_pago: FieldRef<"Medio_pagos", 'String'>
+    readonly Id_estado_medio_pago: FieldRef<"Medio_pagos", 'Int'>
   }
     
 
@@ -8788,6 +8921,25 @@ export namespace Prisma {
      * Limit how many Medio_pagos to delete.
      */
     limit?: number
+  }
+
+  /**
+   * Medio_pagos.Estado_medios_pago
+   */
+  export type Medio_pagos$Estado_medios_pagoArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Estado_medios_pago
+     */
+    select?: Estado_medios_pagoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Estado_medios_pago
+     */
+    omit?: Estado_medios_pagoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Estado_medios_pagoInclude<ExtArgs> | null
+    where?: Estado_medios_pagoWhereInput
   }
 
   /**
@@ -13978,6 +14130,962 @@ export namespace Prisma {
 
 
   /**
+   * Model Estado_medios_pago
+   */
+
+  export type AggregateEstado_medios_pago = {
+    _count: Estado_medios_pagoCountAggregateOutputType | null
+    _avg: Estado_medios_pagoAvgAggregateOutputType | null
+    _sum: Estado_medios_pagoSumAggregateOutputType | null
+    _min: Estado_medios_pagoMinAggregateOutputType | null
+    _max: Estado_medios_pagoMaxAggregateOutputType | null
+  }
+
+  export type Estado_medios_pagoAvgAggregateOutputType = {
+    Id_estado_medio_pago: number | null
+  }
+
+  export type Estado_medios_pagoSumAggregateOutputType = {
+    Id_estado_medio_pago: number | null
+  }
+
+  export type Estado_medios_pagoMinAggregateOutputType = {
+    Id_estado_medio_pago: number | null
+    Nombre_estado_medio_pago: string | null
+  }
+
+  export type Estado_medios_pagoMaxAggregateOutputType = {
+    Id_estado_medio_pago: number | null
+    Nombre_estado_medio_pago: string | null
+  }
+
+  export type Estado_medios_pagoCountAggregateOutputType = {
+    Id_estado_medio_pago: number
+    Nombre_estado_medio_pago: number
+    _all: number
+  }
+
+
+  export type Estado_medios_pagoAvgAggregateInputType = {
+    Id_estado_medio_pago?: true
+  }
+
+  export type Estado_medios_pagoSumAggregateInputType = {
+    Id_estado_medio_pago?: true
+  }
+
+  export type Estado_medios_pagoMinAggregateInputType = {
+    Id_estado_medio_pago?: true
+    Nombre_estado_medio_pago?: true
+  }
+
+  export type Estado_medios_pagoMaxAggregateInputType = {
+    Id_estado_medio_pago?: true
+    Nombre_estado_medio_pago?: true
+  }
+
+  export type Estado_medios_pagoCountAggregateInputType = {
+    Id_estado_medio_pago?: true
+    Nombre_estado_medio_pago?: true
+    _all?: true
+  }
+
+  export type Estado_medios_pagoAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Estado_medios_pago to aggregate.
+     */
+    where?: Estado_medios_pagoWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Estado_medios_pagos to fetch.
+     */
+    orderBy?: Estado_medios_pagoOrderByWithRelationInput | Estado_medios_pagoOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: Estado_medios_pagoWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Estado_medios_pagos from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Estado_medios_pagos.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Estado_medios_pagos
+    **/
+    _count?: true | Estado_medios_pagoCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: Estado_medios_pagoAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: Estado_medios_pagoSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: Estado_medios_pagoMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: Estado_medios_pagoMaxAggregateInputType
+  }
+
+  export type GetEstado_medios_pagoAggregateType<T extends Estado_medios_pagoAggregateArgs> = {
+        [P in keyof T & keyof AggregateEstado_medios_pago]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateEstado_medios_pago[P]>
+      : GetScalarType<T[P], AggregateEstado_medios_pago[P]>
+  }
+
+
+
+
+  export type Estado_medios_pagoGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: Estado_medios_pagoWhereInput
+    orderBy?: Estado_medios_pagoOrderByWithAggregationInput | Estado_medios_pagoOrderByWithAggregationInput[]
+    by: Estado_medios_pagoScalarFieldEnum[] | Estado_medios_pagoScalarFieldEnum
+    having?: Estado_medios_pagoScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: Estado_medios_pagoCountAggregateInputType | true
+    _avg?: Estado_medios_pagoAvgAggregateInputType
+    _sum?: Estado_medios_pagoSumAggregateInputType
+    _min?: Estado_medios_pagoMinAggregateInputType
+    _max?: Estado_medios_pagoMaxAggregateInputType
+  }
+
+  export type Estado_medios_pagoGroupByOutputType = {
+    Id_estado_medio_pago: number
+    Nombre_estado_medio_pago: string | null
+    _count: Estado_medios_pagoCountAggregateOutputType | null
+    _avg: Estado_medios_pagoAvgAggregateOutputType | null
+    _sum: Estado_medios_pagoSumAggregateOutputType | null
+    _min: Estado_medios_pagoMinAggregateOutputType | null
+    _max: Estado_medios_pagoMaxAggregateOutputType | null
+  }
+
+  type GetEstado_medios_pagoGroupByPayload<T extends Estado_medios_pagoGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<Estado_medios_pagoGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof Estado_medios_pagoGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], Estado_medios_pagoGroupByOutputType[P]>
+            : GetScalarType<T[P], Estado_medios_pagoGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type Estado_medios_pagoSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    Id_estado_medio_pago?: boolean
+    Nombre_estado_medio_pago?: boolean
+    Medio_pagos?: boolean | Estado_medios_pago$Medio_pagosArgs<ExtArgs>
+    _count?: boolean | Estado_medios_pagoCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["estado_medios_pago"]>
+
+
+
+  export type Estado_medios_pagoSelectScalar = {
+    Id_estado_medio_pago?: boolean
+    Nombre_estado_medio_pago?: boolean
+  }
+
+  export type Estado_medios_pagoOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"Id_estado_medio_pago" | "Nombre_estado_medio_pago", ExtArgs["result"]["estado_medios_pago"]>
+  export type Estado_medios_pagoInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    Medio_pagos?: boolean | Estado_medios_pago$Medio_pagosArgs<ExtArgs>
+    _count?: boolean | Estado_medios_pagoCountOutputTypeDefaultArgs<ExtArgs>
+  }
+
+  export type $Estado_medios_pagoPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Estado_medios_pago"
+    objects: {
+      Medio_pagos: Prisma.$Medio_pagosPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      Id_estado_medio_pago: number
+      Nombre_estado_medio_pago: string | null
+    }, ExtArgs["result"]["estado_medios_pago"]>
+    composites: {}
+  }
+
+  type Estado_medios_pagoGetPayload<S extends boolean | null | undefined | Estado_medios_pagoDefaultArgs> = $Result.GetResult<Prisma.$Estado_medios_pagoPayload, S>
+
+  type Estado_medios_pagoCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<Estado_medios_pagoFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: Estado_medios_pagoCountAggregateInputType | true
+    }
+
+  export interface Estado_medios_pagoDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Estado_medios_pago'], meta: { name: 'Estado_medios_pago' } }
+    /**
+     * Find zero or one Estado_medios_pago that matches the filter.
+     * @param {Estado_medios_pagoFindUniqueArgs} args - Arguments to find a Estado_medios_pago
+     * @example
+     * // Get one Estado_medios_pago
+     * const estado_medios_pago = await prisma.estado_medios_pago.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends Estado_medios_pagoFindUniqueArgs>(args: SelectSubset<T, Estado_medios_pagoFindUniqueArgs<ExtArgs>>): Prisma__Estado_medios_pagoClient<$Result.GetResult<Prisma.$Estado_medios_pagoPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Estado_medios_pago that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {Estado_medios_pagoFindUniqueOrThrowArgs} args - Arguments to find a Estado_medios_pago
+     * @example
+     * // Get one Estado_medios_pago
+     * const estado_medios_pago = await prisma.estado_medios_pago.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends Estado_medios_pagoFindUniqueOrThrowArgs>(args: SelectSubset<T, Estado_medios_pagoFindUniqueOrThrowArgs<ExtArgs>>): Prisma__Estado_medios_pagoClient<$Result.GetResult<Prisma.$Estado_medios_pagoPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Estado_medios_pago that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {Estado_medios_pagoFindFirstArgs} args - Arguments to find a Estado_medios_pago
+     * @example
+     * // Get one Estado_medios_pago
+     * const estado_medios_pago = await prisma.estado_medios_pago.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends Estado_medios_pagoFindFirstArgs>(args?: SelectSubset<T, Estado_medios_pagoFindFirstArgs<ExtArgs>>): Prisma__Estado_medios_pagoClient<$Result.GetResult<Prisma.$Estado_medios_pagoPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Estado_medios_pago that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {Estado_medios_pagoFindFirstOrThrowArgs} args - Arguments to find a Estado_medios_pago
+     * @example
+     * // Get one Estado_medios_pago
+     * const estado_medios_pago = await prisma.estado_medios_pago.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends Estado_medios_pagoFindFirstOrThrowArgs>(args?: SelectSubset<T, Estado_medios_pagoFindFirstOrThrowArgs<ExtArgs>>): Prisma__Estado_medios_pagoClient<$Result.GetResult<Prisma.$Estado_medios_pagoPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Estado_medios_pagos that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {Estado_medios_pagoFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Estado_medios_pagos
+     * const estado_medios_pagos = await prisma.estado_medios_pago.findMany()
+     * 
+     * // Get first 10 Estado_medios_pagos
+     * const estado_medios_pagos = await prisma.estado_medios_pago.findMany({ take: 10 })
+     * 
+     * // Only select the `Id_estado_medio_pago`
+     * const estado_medios_pagoWithId_estado_medio_pagoOnly = await prisma.estado_medios_pago.findMany({ select: { Id_estado_medio_pago: true } })
+     * 
+     */
+    findMany<T extends Estado_medios_pagoFindManyArgs>(args?: SelectSubset<T, Estado_medios_pagoFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$Estado_medios_pagoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Estado_medios_pago.
+     * @param {Estado_medios_pagoCreateArgs} args - Arguments to create a Estado_medios_pago.
+     * @example
+     * // Create one Estado_medios_pago
+     * const Estado_medios_pago = await prisma.estado_medios_pago.create({
+     *   data: {
+     *     // ... data to create a Estado_medios_pago
+     *   }
+     * })
+     * 
+     */
+    create<T extends Estado_medios_pagoCreateArgs>(args: SelectSubset<T, Estado_medios_pagoCreateArgs<ExtArgs>>): Prisma__Estado_medios_pagoClient<$Result.GetResult<Prisma.$Estado_medios_pagoPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Estado_medios_pagos.
+     * @param {Estado_medios_pagoCreateManyArgs} args - Arguments to create many Estado_medios_pagos.
+     * @example
+     * // Create many Estado_medios_pagos
+     * const estado_medios_pago = await prisma.estado_medios_pago.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends Estado_medios_pagoCreateManyArgs>(args?: SelectSubset<T, Estado_medios_pagoCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Delete a Estado_medios_pago.
+     * @param {Estado_medios_pagoDeleteArgs} args - Arguments to delete one Estado_medios_pago.
+     * @example
+     * // Delete one Estado_medios_pago
+     * const Estado_medios_pago = await prisma.estado_medios_pago.delete({
+     *   where: {
+     *     // ... filter to delete one Estado_medios_pago
+     *   }
+     * })
+     * 
+     */
+    delete<T extends Estado_medios_pagoDeleteArgs>(args: SelectSubset<T, Estado_medios_pagoDeleteArgs<ExtArgs>>): Prisma__Estado_medios_pagoClient<$Result.GetResult<Prisma.$Estado_medios_pagoPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Estado_medios_pago.
+     * @param {Estado_medios_pagoUpdateArgs} args - Arguments to update one Estado_medios_pago.
+     * @example
+     * // Update one Estado_medios_pago
+     * const estado_medios_pago = await prisma.estado_medios_pago.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends Estado_medios_pagoUpdateArgs>(args: SelectSubset<T, Estado_medios_pagoUpdateArgs<ExtArgs>>): Prisma__Estado_medios_pagoClient<$Result.GetResult<Prisma.$Estado_medios_pagoPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Estado_medios_pagos.
+     * @param {Estado_medios_pagoDeleteManyArgs} args - Arguments to filter Estado_medios_pagos to delete.
+     * @example
+     * // Delete a few Estado_medios_pagos
+     * const { count } = await prisma.estado_medios_pago.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends Estado_medios_pagoDeleteManyArgs>(args?: SelectSubset<T, Estado_medios_pagoDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Estado_medios_pagos.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {Estado_medios_pagoUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Estado_medios_pagos
+     * const estado_medios_pago = await prisma.estado_medios_pago.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends Estado_medios_pagoUpdateManyArgs>(args: SelectSubset<T, Estado_medios_pagoUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one Estado_medios_pago.
+     * @param {Estado_medios_pagoUpsertArgs} args - Arguments to update or create a Estado_medios_pago.
+     * @example
+     * // Update or create a Estado_medios_pago
+     * const estado_medios_pago = await prisma.estado_medios_pago.upsert({
+     *   create: {
+     *     // ... data to create a Estado_medios_pago
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Estado_medios_pago we want to update
+     *   }
+     * })
+     */
+    upsert<T extends Estado_medios_pagoUpsertArgs>(args: SelectSubset<T, Estado_medios_pagoUpsertArgs<ExtArgs>>): Prisma__Estado_medios_pagoClient<$Result.GetResult<Prisma.$Estado_medios_pagoPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Estado_medios_pagos.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {Estado_medios_pagoCountArgs} args - Arguments to filter Estado_medios_pagos to count.
+     * @example
+     * // Count the number of Estado_medios_pagos
+     * const count = await prisma.estado_medios_pago.count({
+     *   where: {
+     *     // ... the filter for the Estado_medios_pagos we want to count
+     *   }
+     * })
+    **/
+    count<T extends Estado_medios_pagoCountArgs>(
+      args?: Subset<T, Estado_medios_pagoCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], Estado_medios_pagoCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Estado_medios_pago.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {Estado_medios_pagoAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends Estado_medios_pagoAggregateArgs>(args: Subset<T, Estado_medios_pagoAggregateArgs>): Prisma.PrismaPromise<GetEstado_medios_pagoAggregateType<T>>
+
+    /**
+     * Group by Estado_medios_pago.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {Estado_medios_pagoGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends Estado_medios_pagoGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: Estado_medios_pagoGroupByArgs['orderBy'] }
+        : { orderBy?: Estado_medios_pagoGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, Estado_medios_pagoGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetEstado_medios_pagoGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Estado_medios_pago model
+   */
+  readonly fields: Estado_medios_pagoFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Estado_medios_pago.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__Estado_medios_pagoClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    Medio_pagos<T extends Estado_medios_pago$Medio_pagosArgs<ExtArgs> = {}>(args?: Subset<T, Estado_medios_pago$Medio_pagosArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$Medio_pagosPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Estado_medios_pago model
+   */
+  interface Estado_medios_pagoFieldRefs {
+    readonly Id_estado_medio_pago: FieldRef<"Estado_medios_pago", 'Int'>
+    readonly Nombre_estado_medio_pago: FieldRef<"Estado_medios_pago", 'String'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Estado_medios_pago findUnique
+   */
+  export type Estado_medios_pagoFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Estado_medios_pago
+     */
+    select?: Estado_medios_pagoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Estado_medios_pago
+     */
+    omit?: Estado_medios_pagoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Estado_medios_pagoInclude<ExtArgs> | null
+    /**
+     * Filter, which Estado_medios_pago to fetch.
+     */
+    where: Estado_medios_pagoWhereUniqueInput
+  }
+
+  /**
+   * Estado_medios_pago findUniqueOrThrow
+   */
+  export type Estado_medios_pagoFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Estado_medios_pago
+     */
+    select?: Estado_medios_pagoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Estado_medios_pago
+     */
+    omit?: Estado_medios_pagoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Estado_medios_pagoInclude<ExtArgs> | null
+    /**
+     * Filter, which Estado_medios_pago to fetch.
+     */
+    where: Estado_medios_pagoWhereUniqueInput
+  }
+
+  /**
+   * Estado_medios_pago findFirst
+   */
+  export type Estado_medios_pagoFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Estado_medios_pago
+     */
+    select?: Estado_medios_pagoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Estado_medios_pago
+     */
+    omit?: Estado_medios_pagoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Estado_medios_pagoInclude<ExtArgs> | null
+    /**
+     * Filter, which Estado_medios_pago to fetch.
+     */
+    where?: Estado_medios_pagoWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Estado_medios_pagos to fetch.
+     */
+    orderBy?: Estado_medios_pagoOrderByWithRelationInput | Estado_medios_pagoOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Estado_medios_pagos.
+     */
+    cursor?: Estado_medios_pagoWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Estado_medios_pagos from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Estado_medios_pagos.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Estado_medios_pagos.
+     */
+    distinct?: Estado_medios_pagoScalarFieldEnum | Estado_medios_pagoScalarFieldEnum[]
+  }
+
+  /**
+   * Estado_medios_pago findFirstOrThrow
+   */
+  export type Estado_medios_pagoFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Estado_medios_pago
+     */
+    select?: Estado_medios_pagoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Estado_medios_pago
+     */
+    omit?: Estado_medios_pagoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Estado_medios_pagoInclude<ExtArgs> | null
+    /**
+     * Filter, which Estado_medios_pago to fetch.
+     */
+    where?: Estado_medios_pagoWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Estado_medios_pagos to fetch.
+     */
+    orderBy?: Estado_medios_pagoOrderByWithRelationInput | Estado_medios_pagoOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Estado_medios_pagos.
+     */
+    cursor?: Estado_medios_pagoWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Estado_medios_pagos from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Estado_medios_pagos.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Estado_medios_pagos.
+     */
+    distinct?: Estado_medios_pagoScalarFieldEnum | Estado_medios_pagoScalarFieldEnum[]
+  }
+
+  /**
+   * Estado_medios_pago findMany
+   */
+  export type Estado_medios_pagoFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Estado_medios_pago
+     */
+    select?: Estado_medios_pagoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Estado_medios_pago
+     */
+    omit?: Estado_medios_pagoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Estado_medios_pagoInclude<ExtArgs> | null
+    /**
+     * Filter, which Estado_medios_pagos to fetch.
+     */
+    where?: Estado_medios_pagoWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Estado_medios_pagos to fetch.
+     */
+    orderBy?: Estado_medios_pagoOrderByWithRelationInput | Estado_medios_pagoOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Estado_medios_pagos.
+     */
+    cursor?: Estado_medios_pagoWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Estado_medios_pagos from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Estado_medios_pagos.
+     */
+    skip?: number
+    distinct?: Estado_medios_pagoScalarFieldEnum | Estado_medios_pagoScalarFieldEnum[]
+  }
+
+  /**
+   * Estado_medios_pago create
+   */
+  export type Estado_medios_pagoCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Estado_medios_pago
+     */
+    select?: Estado_medios_pagoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Estado_medios_pago
+     */
+    omit?: Estado_medios_pagoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Estado_medios_pagoInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Estado_medios_pago.
+     */
+    data: XOR<Estado_medios_pagoCreateInput, Estado_medios_pagoUncheckedCreateInput>
+  }
+
+  /**
+   * Estado_medios_pago createMany
+   */
+  export type Estado_medios_pagoCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Estado_medios_pagos.
+     */
+    data: Estado_medios_pagoCreateManyInput | Estado_medios_pagoCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Estado_medios_pago update
+   */
+  export type Estado_medios_pagoUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Estado_medios_pago
+     */
+    select?: Estado_medios_pagoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Estado_medios_pago
+     */
+    omit?: Estado_medios_pagoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Estado_medios_pagoInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Estado_medios_pago.
+     */
+    data: XOR<Estado_medios_pagoUpdateInput, Estado_medios_pagoUncheckedUpdateInput>
+    /**
+     * Choose, which Estado_medios_pago to update.
+     */
+    where: Estado_medios_pagoWhereUniqueInput
+  }
+
+  /**
+   * Estado_medios_pago updateMany
+   */
+  export type Estado_medios_pagoUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Estado_medios_pagos.
+     */
+    data: XOR<Estado_medios_pagoUpdateManyMutationInput, Estado_medios_pagoUncheckedUpdateManyInput>
+    /**
+     * Filter which Estado_medios_pagos to update
+     */
+    where?: Estado_medios_pagoWhereInput
+    /**
+     * Limit how many Estado_medios_pagos to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Estado_medios_pago upsert
+   */
+  export type Estado_medios_pagoUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Estado_medios_pago
+     */
+    select?: Estado_medios_pagoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Estado_medios_pago
+     */
+    omit?: Estado_medios_pagoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Estado_medios_pagoInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Estado_medios_pago to update in case it exists.
+     */
+    where: Estado_medios_pagoWhereUniqueInput
+    /**
+     * In case the Estado_medios_pago found by the `where` argument doesn't exist, create a new Estado_medios_pago with this data.
+     */
+    create: XOR<Estado_medios_pagoCreateInput, Estado_medios_pagoUncheckedCreateInput>
+    /**
+     * In case the Estado_medios_pago was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<Estado_medios_pagoUpdateInput, Estado_medios_pagoUncheckedUpdateInput>
+  }
+
+  /**
+   * Estado_medios_pago delete
+   */
+  export type Estado_medios_pagoDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Estado_medios_pago
+     */
+    select?: Estado_medios_pagoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Estado_medios_pago
+     */
+    omit?: Estado_medios_pagoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Estado_medios_pagoInclude<ExtArgs> | null
+    /**
+     * Filter which Estado_medios_pago to delete.
+     */
+    where: Estado_medios_pagoWhereUniqueInput
+  }
+
+  /**
+   * Estado_medios_pago deleteMany
+   */
+  export type Estado_medios_pagoDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Estado_medios_pagos to delete
+     */
+    where?: Estado_medios_pagoWhereInput
+    /**
+     * Limit how many Estado_medios_pagos to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Estado_medios_pago.Medio_pagos
+   */
+  export type Estado_medios_pago$Medio_pagosArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Medio_pagos
+     */
+    select?: Medio_pagosSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Medio_pagos
+     */
+    omit?: Medio_pagosOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Medio_pagosInclude<ExtArgs> | null
+    where?: Medio_pagosWhereInput
+    orderBy?: Medio_pagosOrderByWithRelationInput | Medio_pagosOrderByWithRelationInput[]
+    cursor?: Medio_pagosWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: Medio_pagosScalarFieldEnum | Medio_pagosScalarFieldEnum[]
+  }
+
+  /**
+   * Estado_medios_pago without action
+   */
+  export type Estado_medios_pagoDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Estado_medios_pago
+     */
+    select?: Estado_medios_pagoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Estado_medios_pago
+     */
+    omit?: Estado_medios_pagoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Estado_medios_pagoInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -14048,7 +15156,8 @@ export namespace Prisma {
 
   export const Medio_pagosScalarFieldEnum: {
     Id_pago: 'Id_pago',
-    Nombre_pago: 'Nombre_pago'
+    Nombre_pago: 'Nombre_pago',
+    Id_estado_medio_pago: 'Id_estado_medio_pago'
   };
 
   export type Medio_pagosScalarFieldEnum = (typeof Medio_pagosScalarFieldEnum)[keyof typeof Medio_pagosScalarFieldEnum]
@@ -14108,6 +15217,14 @@ export namespace Prisma {
   };
 
   export type VentasScalarFieldEnum = (typeof VentasScalarFieldEnum)[keyof typeof VentasScalarFieldEnum]
+
+
+  export const Estado_medios_pagoScalarFieldEnum: {
+    Id_estado_medio_pago: 'Id_estado_medio_pago',
+    Nombre_estado_medio_pago: 'Nombre_estado_medio_pago'
+  };
+
+  export type Estado_medios_pagoScalarFieldEnum = (typeof Estado_medios_pagoScalarFieldEnum)[keyof typeof Estado_medios_pagoScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -14190,6 +15307,13 @@ export namespace Prisma {
   };
 
   export type UsuariosOrderByRelevanceFieldEnum = (typeof UsuariosOrderByRelevanceFieldEnum)[keyof typeof UsuariosOrderByRelevanceFieldEnum]
+
+
+  export const Estado_medios_pagoOrderByRelevanceFieldEnum: {
+    Nombre_estado_medio_pago: 'Nombre_estado_medio_pago'
+  };
+
+  export type Estado_medios_pagoOrderByRelevanceFieldEnum = (typeof Estado_medios_pagoOrderByRelevanceFieldEnum)[keyof typeof Estado_medios_pagoOrderByRelevanceFieldEnum]
 
 
   /**
@@ -14536,12 +15660,16 @@ export namespace Prisma {
     NOT?: Medio_pagosWhereInput | Medio_pagosWhereInput[]
     Id_pago?: IntFilter<"Medio_pagos"> | number
     Nombre_pago?: StringNullableFilter<"Medio_pagos"> | string | null
+    Id_estado_medio_pago?: IntNullableFilter<"Medio_pagos"> | number | null
+    Estado_medios_pago?: XOR<Estado_medios_pagoNullableScalarRelationFilter, Estado_medios_pagoWhereInput> | null
     Ventas?: VentasListRelationFilter
   }
 
   export type Medio_pagosOrderByWithRelationInput = {
     Id_pago?: SortOrder
     Nombre_pago?: SortOrderInput | SortOrder
+    Id_estado_medio_pago?: SortOrderInput | SortOrder
+    Estado_medios_pago?: Estado_medios_pagoOrderByWithRelationInput
     Ventas?: VentasOrderByRelationAggregateInput
     _relevance?: Medio_pagosOrderByRelevanceInput
   }
@@ -14552,12 +15680,15 @@ export namespace Prisma {
     OR?: Medio_pagosWhereInput[]
     NOT?: Medio_pagosWhereInput | Medio_pagosWhereInput[]
     Nombre_pago?: StringNullableFilter<"Medio_pagos"> | string | null
+    Id_estado_medio_pago?: IntNullableFilter<"Medio_pagos"> | number | null
+    Estado_medios_pago?: XOR<Estado_medios_pagoNullableScalarRelationFilter, Estado_medios_pagoWhereInput> | null
     Ventas?: VentasListRelationFilter
   }, "Id_pago">
 
   export type Medio_pagosOrderByWithAggregationInput = {
     Id_pago?: SortOrder
     Nombre_pago?: SortOrderInput | SortOrder
+    Id_estado_medio_pago?: SortOrderInput | SortOrder
     _count?: Medio_pagosCountOrderByAggregateInput
     _avg?: Medio_pagosAvgOrderByAggregateInput
     _max?: Medio_pagosMaxOrderByAggregateInput
@@ -14571,6 +15702,7 @@ export namespace Prisma {
     NOT?: Medio_pagosScalarWhereWithAggregatesInput | Medio_pagosScalarWhereWithAggregatesInput[]
     Id_pago?: IntWithAggregatesFilter<"Medio_pagos"> | number
     Nombre_pago?: StringNullableWithAggregatesFilter<"Medio_pagos"> | string | null
+    Id_estado_medio_pago?: IntNullableWithAggregatesFilter<"Medio_pagos"> | number | null
   }
 
   export type OperacionWhereInput = {
@@ -14888,6 +16020,49 @@ export namespace Prisma {
     Id_estado_venta?: IntNullableWithAggregatesFilter<"Ventas"> | number | null
   }
 
+  export type Estado_medios_pagoWhereInput = {
+    AND?: Estado_medios_pagoWhereInput | Estado_medios_pagoWhereInput[]
+    OR?: Estado_medios_pagoWhereInput[]
+    NOT?: Estado_medios_pagoWhereInput | Estado_medios_pagoWhereInput[]
+    Id_estado_medio_pago?: IntFilter<"Estado_medios_pago"> | number
+    Nombre_estado_medio_pago?: StringNullableFilter<"Estado_medios_pago"> | string | null
+    Medio_pagos?: Medio_pagosListRelationFilter
+  }
+
+  export type Estado_medios_pagoOrderByWithRelationInput = {
+    Id_estado_medio_pago?: SortOrder
+    Nombre_estado_medio_pago?: SortOrderInput | SortOrder
+    Medio_pagos?: Medio_pagosOrderByRelationAggregateInput
+    _relevance?: Estado_medios_pagoOrderByRelevanceInput
+  }
+
+  export type Estado_medios_pagoWhereUniqueInput = Prisma.AtLeast<{
+    Id_estado_medio_pago?: number
+    AND?: Estado_medios_pagoWhereInput | Estado_medios_pagoWhereInput[]
+    OR?: Estado_medios_pagoWhereInput[]
+    NOT?: Estado_medios_pagoWhereInput | Estado_medios_pagoWhereInput[]
+    Nombre_estado_medio_pago?: StringNullableFilter<"Estado_medios_pago"> | string | null
+    Medio_pagos?: Medio_pagosListRelationFilter
+  }, "Id_estado_medio_pago">
+
+  export type Estado_medios_pagoOrderByWithAggregationInput = {
+    Id_estado_medio_pago?: SortOrder
+    Nombre_estado_medio_pago?: SortOrderInput | SortOrder
+    _count?: Estado_medios_pagoCountOrderByAggregateInput
+    _avg?: Estado_medios_pagoAvgOrderByAggregateInput
+    _max?: Estado_medios_pagoMaxOrderByAggregateInput
+    _min?: Estado_medios_pagoMinOrderByAggregateInput
+    _sum?: Estado_medios_pagoSumOrderByAggregateInput
+  }
+
+  export type Estado_medios_pagoScalarWhereWithAggregatesInput = {
+    AND?: Estado_medios_pagoScalarWhereWithAggregatesInput | Estado_medios_pagoScalarWhereWithAggregatesInput[]
+    OR?: Estado_medios_pagoScalarWhereWithAggregatesInput[]
+    NOT?: Estado_medios_pagoScalarWhereWithAggregatesInput | Estado_medios_pagoScalarWhereWithAggregatesInput[]
+    Id_estado_medio_pago?: IntWithAggregatesFilter<"Estado_medios_pago"> | number
+    Nombre_estado_medio_pago?: StringNullableWithAggregatesFilter<"Estado_medios_pago"> | string | null
+  }
+
   export type CargosCreateInput = {
     Id_cargo: number
     Nombre_cargo?: string | null
@@ -15156,29 +16331,34 @@ export namespace Prisma {
 
   export type Medio_pagosCreateInput = {
     Nombre_pago?: string | null
+    Estado_medios_pago?: Estado_medios_pagoCreateNestedOneWithoutMedio_pagosInput
     Ventas?: VentasCreateNestedManyWithoutMedio_pagosInput
   }
 
   export type Medio_pagosUncheckedCreateInput = {
     Id_pago?: number
     Nombre_pago?: string | null
+    Id_estado_medio_pago?: number | null
     Ventas?: VentasUncheckedCreateNestedManyWithoutMedio_pagosInput
   }
 
   export type Medio_pagosUpdateInput = {
     Nombre_pago?: NullableStringFieldUpdateOperationsInput | string | null
+    Estado_medios_pago?: Estado_medios_pagoUpdateOneWithoutMedio_pagosNestedInput
     Ventas?: VentasUpdateManyWithoutMedio_pagosNestedInput
   }
 
   export type Medio_pagosUncheckedUpdateInput = {
     Id_pago?: IntFieldUpdateOperationsInput | number
     Nombre_pago?: NullableStringFieldUpdateOperationsInput | string | null
+    Id_estado_medio_pago?: NullableIntFieldUpdateOperationsInput | number | null
     Ventas?: VentasUncheckedUpdateManyWithoutMedio_pagosNestedInput
   }
 
   export type Medio_pagosCreateManyInput = {
     Id_pago?: number
     Nombre_pago?: string | null
+    Id_estado_medio_pago?: number | null
   }
 
   export type Medio_pagosUpdateManyMutationInput = {
@@ -15188,6 +16368,7 @@ export namespace Prisma {
   export type Medio_pagosUncheckedUpdateManyInput = {
     Id_pago?: IntFieldUpdateOperationsInput | number
     Nombre_pago?: NullableStringFieldUpdateOperationsInput | string | null
+    Id_estado_medio_pago?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
   export type OperacionCreateInput = {
@@ -15488,6 +16669,45 @@ export namespace Prisma {
     Id_usuario?: IntFieldUpdateOperationsInput | number
     Utilidad_total?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     Id_estado_venta?: NullableIntFieldUpdateOperationsInput | number | null
+  }
+
+  export type Estado_medios_pagoCreateInput = {
+    Id_estado_medio_pago: number
+    Nombre_estado_medio_pago?: string | null
+    Medio_pagos?: Medio_pagosCreateNestedManyWithoutEstado_medios_pagoInput
+  }
+
+  export type Estado_medios_pagoUncheckedCreateInput = {
+    Id_estado_medio_pago: number
+    Nombre_estado_medio_pago?: string | null
+    Medio_pagos?: Medio_pagosUncheckedCreateNestedManyWithoutEstado_medios_pagoInput
+  }
+
+  export type Estado_medios_pagoUpdateInput = {
+    Id_estado_medio_pago?: IntFieldUpdateOperationsInput | number
+    Nombre_estado_medio_pago?: NullableStringFieldUpdateOperationsInput | string | null
+    Medio_pagos?: Medio_pagosUpdateManyWithoutEstado_medios_pagoNestedInput
+  }
+
+  export type Estado_medios_pagoUncheckedUpdateInput = {
+    Id_estado_medio_pago?: IntFieldUpdateOperationsInput | number
+    Nombre_estado_medio_pago?: NullableStringFieldUpdateOperationsInput | string | null
+    Medio_pagos?: Medio_pagosUncheckedUpdateManyWithoutEstado_medios_pagoNestedInput
+  }
+
+  export type Estado_medios_pagoCreateManyInput = {
+    Id_estado_medio_pago: number
+    Nombre_estado_medio_pago?: string | null
+  }
+
+  export type Estado_medios_pagoUpdateManyMutationInput = {
+    Id_estado_medio_pago?: IntFieldUpdateOperationsInput | number
+    Nombre_estado_medio_pago?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type Estado_medios_pagoUncheckedUpdateManyInput = {
+    Id_estado_medio_pago?: IntFieldUpdateOperationsInput | number
+    Nombre_estado_medio_pago?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type IntFilter<$PrismaModel = never> = {
@@ -15883,6 +17103,11 @@ export namespace Prisma {
     _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
+  export type Estado_medios_pagoNullableScalarRelationFilter = {
+    is?: Estado_medios_pagoWhereInput | null
+    isNot?: Estado_medios_pagoWhereInput | null
+  }
+
   export type Medio_pagosOrderByRelevanceInput = {
     fields: Medio_pagosOrderByRelevanceFieldEnum | Medio_pagosOrderByRelevanceFieldEnum[]
     sort: SortOrder
@@ -15892,24 +17117,29 @@ export namespace Prisma {
   export type Medio_pagosCountOrderByAggregateInput = {
     Id_pago?: SortOrder
     Nombre_pago?: SortOrder
+    Id_estado_medio_pago?: SortOrder
   }
 
   export type Medio_pagosAvgOrderByAggregateInput = {
     Id_pago?: SortOrder
+    Id_estado_medio_pago?: SortOrder
   }
 
   export type Medio_pagosMaxOrderByAggregateInput = {
     Id_pago?: SortOrder
     Nombre_pago?: SortOrder
+    Id_estado_medio_pago?: SortOrder
   }
 
   export type Medio_pagosMinOrderByAggregateInput = {
     Id_pago?: SortOrder
     Nombre_pago?: SortOrder
+    Id_estado_medio_pago?: SortOrder
   }
 
   export type Medio_pagosSumOrderByAggregateInput = {
     Id_pago?: SortOrder
+    Id_estado_medio_pago?: SortOrder
   }
 
   export type Tipo_operacionNullableScalarRelationFilter = {
@@ -16178,6 +17408,45 @@ export namespace Prisma {
     Id_estado_venta?: SortOrder
   }
 
+  export type Medio_pagosListRelationFilter = {
+    every?: Medio_pagosWhereInput
+    some?: Medio_pagosWhereInput
+    none?: Medio_pagosWhereInput
+  }
+
+  export type Medio_pagosOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type Estado_medios_pagoOrderByRelevanceInput = {
+    fields: Estado_medios_pagoOrderByRelevanceFieldEnum | Estado_medios_pagoOrderByRelevanceFieldEnum[]
+    sort: SortOrder
+    search: string
+  }
+
+  export type Estado_medios_pagoCountOrderByAggregateInput = {
+    Id_estado_medio_pago?: SortOrder
+    Nombre_estado_medio_pago?: SortOrder
+  }
+
+  export type Estado_medios_pagoAvgOrderByAggregateInput = {
+    Id_estado_medio_pago?: SortOrder
+  }
+
+  export type Estado_medios_pagoMaxOrderByAggregateInput = {
+    Id_estado_medio_pago?: SortOrder
+    Nombre_estado_medio_pago?: SortOrder
+  }
+
+  export type Estado_medios_pagoMinOrderByAggregateInput = {
+    Id_estado_medio_pago?: SortOrder
+    Nombre_estado_medio_pago?: SortOrder
+  }
+
+  export type Estado_medios_pagoSumOrderByAggregateInput = {
+    Id_estado_medio_pago?: SortOrder
+  }
+
   export type UsuariosCreateNestedManyWithoutCargosInput = {
     create?: XOR<UsuariosCreateWithoutCargosInput, UsuariosUncheckedCreateWithoutCargosInput> | UsuariosCreateWithoutCargosInput[] | UsuariosUncheckedCreateWithoutCargosInput[]
     connectOrCreate?: UsuariosCreateOrConnectWithoutCargosInput | UsuariosCreateOrConnectWithoutCargosInput[]
@@ -16422,6 +17691,12 @@ export namespace Prisma {
     update?: XOR<XOR<ProductosUpdateToOneWithWhereWithoutLote_productosInput, ProductosUpdateWithoutLote_productosInput>, ProductosUncheckedUpdateWithoutLote_productosInput>
   }
 
+  export type Estado_medios_pagoCreateNestedOneWithoutMedio_pagosInput = {
+    create?: XOR<Estado_medios_pagoCreateWithoutMedio_pagosInput, Estado_medios_pagoUncheckedCreateWithoutMedio_pagosInput>
+    connectOrCreate?: Estado_medios_pagoCreateOrConnectWithoutMedio_pagosInput
+    connect?: Estado_medios_pagoWhereUniqueInput
+  }
+
   export type VentasCreateNestedManyWithoutMedio_pagosInput = {
     create?: XOR<VentasCreateWithoutMedio_pagosInput, VentasUncheckedCreateWithoutMedio_pagosInput> | VentasCreateWithoutMedio_pagosInput[] | VentasUncheckedCreateWithoutMedio_pagosInput[]
     connectOrCreate?: VentasCreateOrConnectWithoutMedio_pagosInput | VentasCreateOrConnectWithoutMedio_pagosInput[]
@@ -16434,6 +17709,16 @@ export namespace Prisma {
     connectOrCreate?: VentasCreateOrConnectWithoutMedio_pagosInput | VentasCreateOrConnectWithoutMedio_pagosInput[]
     createMany?: VentasCreateManyMedio_pagosInputEnvelope
     connect?: VentasWhereUniqueInput | VentasWhereUniqueInput[]
+  }
+
+  export type Estado_medios_pagoUpdateOneWithoutMedio_pagosNestedInput = {
+    create?: XOR<Estado_medios_pagoCreateWithoutMedio_pagosInput, Estado_medios_pagoUncheckedCreateWithoutMedio_pagosInput>
+    connectOrCreate?: Estado_medios_pagoCreateOrConnectWithoutMedio_pagosInput
+    upsert?: Estado_medios_pagoUpsertWithoutMedio_pagosInput
+    disconnect?: Estado_medios_pagoWhereInput | boolean
+    delete?: Estado_medios_pagoWhereInput | boolean
+    connect?: Estado_medios_pagoWhereUniqueInput
+    update?: XOR<XOR<Estado_medios_pagoUpdateToOneWithWhereWithoutMedio_pagosInput, Estado_medios_pagoUpdateWithoutMedio_pagosInput>, Estado_medios_pagoUncheckedUpdateWithoutMedio_pagosInput>
   }
 
   export type VentasUpdateManyWithoutMedio_pagosNestedInput = {
@@ -16782,6 +18067,48 @@ export namespace Prisma {
     update?: Detalle_ventas_productosUpdateWithWhereUniqueWithoutVentasInput | Detalle_ventas_productosUpdateWithWhereUniqueWithoutVentasInput[]
     updateMany?: Detalle_ventas_productosUpdateManyWithWhereWithoutVentasInput | Detalle_ventas_productosUpdateManyWithWhereWithoutVentasInput[]
     deleteMany?: Detalle_ventas_productosScalarWhereInput | Detalle_ventas_productosScalarWhereInput[]
+  }
+
+  export type Medio_pagosCreateNestedManyWithoutEstado_medios_pagoInput = {
+    create?: XOR<Medio_pagosCreateWithoutEstado_medios_pagoInput, Medio_pagosUncheckedCreateWithoutEstado_medios_pagoInput> | Medio_pagosCreateWithoutEstado_medios_pagoInput[] | Medio_pagosUncheckedCreateWithoutEstado_medios_pagoInput[]
+    connectOrCreate?: Medio_pagosCreateOrConnectWithoutEstado_medios_pagoInput | Medio_pagosCreateOrConnectWithoutEstado_medios_pagoInput[]
+    createMany?: Medio_pagosCreateManyEstado_medios_pagoInputEnvelope
+    connect?: Medio_pagosWhereUniqueInput | Medio_pagosWhereUniqueInput[]
+  }
+
+  export type Medio_pagosUncheckedCreateNestedManyWithoutEstado_medios_pagoInput = {
+    create?: XOR<Medio_pagosCreateWithoutEstado_medios_pagoInput, Medio_pagosUncheckedCreateWithoutEstado_medios_pagoInput> | Medio_pagosCreateWithoutEstado_medios_pagoInput[] | Medio_pagosUncheckedCreateWithoutEstado_medios_pagoInput[]
+    connectOrCreate?: Medio_pagosCreateOrConnectWithoutEstado_medios_pagoInput | Medio_pagosCreateOrConnectWithoutEstado_medios_pagoInput[]
+    createMany?: Medio_pagosCreateManyEstado_medios_pagoInputEnvelope
+    connect?: Medio_pagosWhereUniqueInput | Medio_pagosWhereUniqueInput[]
+  }
+
+  export type Medio_pagosUpdateManyWithoutEstado_medios_pagoNestedInput = {
+    create?: XOR<Medio_pagosCreateWithoutEstado_medios_pagoInput, Medio_pagosUncheckedCreateWithoutEstado_medios_pagoInput> | Medio_pagosCreateWithoutEstado_medios_pagoInput[] | Medio_pagosUncheckedCreateWithoutEstado_medios_pagoInput[]
+    connectOrCreate?: Medio_pagosCreateOrConnectWithoutEstado_medios_pagoInput | Medio_pagosCreateOrConnectWithoutEstado_medios_pagoInput[]
+    upsert?: Medio_pagosUpsertWithWhereUniqueWithoutEstado_medios_pagoInput | Medio_pagosUpsertWithWhereUniqueWithoutEstado_medios_pagoInput[]
+    createMany?: Medio_pagosCreateManyEstado_medios_pagoInputEnvelope
+    set?: Medio_pagosWhereUniqueInput | Medio_pagosWhereUniqueInput[]
+    disconnect?: Medio_pagosWhereUniqueInput | Medio_pagosWhereUniqueInput[]
+    delete?: Medio_pagosWhereUniqueInput | Medio_pagosWhereUniqueInput[]
+    connect?: Medio_pagosWhereUniqueInput | Medio_pagosWhereUniqueInput[]
+    update?: Medio_pagosUpdateWithWhereUniqueWithoutEstado_medios_pagoInput | Medio_pagosUpdateWithWhereUniqueWithoutEstado_medios_pagoInput[]
+    updateMany?: Medio_pagosUpdateManyWithWhereWithoutEstado_medios_pagoInput | Medio_pagosUpdateManyWithWhereWithoutEstado_medios_pagoInput[]
+    deleteMany?: Medio_pagosScalarWhereInput | Medio_pagosScalarWhereInput[]
+  }
+
+  export type Medio_pagosUncheckedUpdateManyWithoutEstado_medios_pagoNestedInput = {
+    create?: XOR<Medio_pagosCreateWithoutEstado_medios_pagoInput, Medio_pagosUncheckedCreateWithoutEstado_medios_pagoInput> | Medio_pagosCreateWithoutEstado_medios_pagoInput[] | Medio_pagosUncheckedCreateWithoutEstado_medios_pagoInput[]
+    connectOrCreate?: Medio_pagosCreateOrConnectWithoutEstado_medios_pagoInput | Medio_pagosCreateOrConnectWithoutEstado_medios_pagoInput[]
+    upsert?: Medio_pagosUpsertWithWhereUniqueWithoutEstado_medios_pagoInput | Medio_pagosUpsertWithWhereUniqueWithoutEstado_medios_pagoInput[]
+    createMany?: Medio_pagosCreateManyEstado_medios_pagoInputEnvelope
+    set?: Medio_pagosWhereUniqueInput | Medio_pagosWhereUniqueInput[]
+    disconnect?: Medio_pagosWhereUniqueInput | Medio_pagosWhereUniqueInput[]
+    delete?: Medio_pagosWhereUniqueInput | Medio_pagosWhereUniqueInput[]
+    connect?: Medio_pagosWhereUniqueInput | Medio_pagosWhereUniqueInput[]
+    update?: Medio_pagosUpdateWithWhereUniqueWithoutEstado_medios_pagoInput | Medio_pagosUpdateWithWhereUniqueWithoutEstado_medios_pagoInput[]
+    updateMany?: Medio_pagosUpdateManyWithWhereWithoutEstado_medios_pagoInput | Medio_pagosUpdateManyWithWhereWithoutEstado_medios_pagoInput[]
+    deleteMany?: Medio_pagosScalarWhereInput | Medio_pagosScalarWhereInput[]
   }
 
   export type NestedIntFilter<$PrismaModel = never> = {
@@ -17315,6 +18642,21 @@ export namespace Prisma {
     Detalle_ventas_productos?: Detalle_ventas_productosUncheckedUpdateManyWithoutProductosNestedInput
   }
 
+  export type Estado_medios_pagoCreateWithoutMedio_pagosInput = {
+    Id_estado_medio_pago: number
+    Nombre_estado_medio_pago?: string | null
+  }
+
+  export type Estado_medios_pagoUncheckedCreateWithoutMedio_pagosInput = {
+    Id_estado_medio_pago: number
+    Nombre_estado_medio_pago?: string | null
+  }
+
+  export type Estado_medios_pagoCreateOrConnectWithoutMedio_pagosInput = {
+    where: Estado_medios_pagoWhereUniqueInput
+    create: XOR<Estado_medios_pagoCreateWithoutMedio_pagosInput, Estado_medios_pagoUncheckedCreateWithoutMedio_pagosInput>
+  }
+
   export type VentasCreateWithoutMedio_pagosInput = {
     Id_venta: number
     Total_venta?: Decimal | DecimalJsLike | number | string | null
@@ -17343,6 +18685,27 @@ export namespace Prisma {
   export type VentasCreateManyMedio_pagosInputEnvelope = {
     data: VentasCreateManyMedio_pagosInput | VentasCreateManyMedio_pagosInput[]
     skipDuplicates?: boolean
+  }
+
+  export type Estado_medios_pagoUpsertWithoutMedio_pagosInput = {
+    update: XOR<Estado_medios_pagoUpdateWithoutMedio_pagosInput, Estado_medios_pagoUncheckedUpdateWithoutMedio_pagosInput>
+    create: XOR<Estado_medios_pagoCreateWithoutMedio_pagosInput, Estado_medios_pagoUncheckedCreateWithoutMedio_pagosInput>
+    where?: Estado_medios_pagoWhereInput
+  }
+
+  export type Estado_medios_pagoUpdateToOneWithWhereWithoutMedio_pagosInput = {
+    where?: Estado_medios_pagoWhereInput
+    data: XOR<Estado_medios_pagoUpdateWithoutMedio_pagosInput, Estado_medios_pagoUncheckedUpdateWithoutMedio_pagosInput>
+  }
+
+  export type Estado_medios_pagoUpdateWithoutMedio_pagosInput = {
+    Id_estado_medio_pago?: IntFieldUpdateOperationsInput | number
+    Nombre_estado_medio_pago?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type Estado_medios_pagoUncheckedUpdateWithoutMedio_pagosInput = {
+    Id_estado_medio_pago?: IntFieldUpdateOperationsInput | number
+    Nombre_estado_medio_pago?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type VentasUpsertWithWhereUniqueWithoutMedio_pagosInput = {
@@ -17736,11 +19099,13 @@ export namespace Prisma {
 
   export type Medio_pagosCreateWithoutVentasInput = {
     Nombre_pago?: string | null
+    Estado_medios_pago?: Estado_medios_pagoCreateNestedOneWithoutMedio_pagosInput
   }
 
   export type Medio_pagosUncheckedCreateWithoutVentasInput = {
     Id_pago?: number
     Nombre_pago?: string | null
+    Id_estado_medio_pago?: number | null
   }
 
   export type Medio_pagosCreateOrConnectWithoutVentasInput = {
@@ -17822,11 +19187,13 @@ export namespace Prisma {
 
   export type Medio_pagosUpdateWithoutVentasInput = {
     Nombre_pago?: NullableStringFieldUpdateOperationsInput | string | null
+    Estado_medios_pago?: Estado_medios_pagoUpdateOneWithoutMedio_pagosNestedInput
   }
 
   export type Medio_pagosUncheckedUpdateWithoutVentasInput = {
     Id_pago?: IntFieldUpdateOperationsInput | number
     Nombre_pago?: NullableStringFieldUpdateOperationsInput | string | null
+    Id_estado_medio_pago?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
   export type UsuariosUpsertWithoutVentasInput = {
@@ -17858,6 +19225,52 @@ export namespace Prisma {
     Contrasena?: NullableStringFieldUpdateOperationsInput | string | null
     Cargo?: NullableIntFieldUpdateOperationsInput | number | null
     Id_estado_usuario?: NullableIntFieldUpdateOperationsInput | number | null
+  }
+
+  export type Medio_pagosCreateWithoutEstado_medios_pagoInput = {
+    Nombre_pago?: string | null
+    Ventas?: VentasCreateNestedManyWithoutMedio_pagosInput
+  }
+
+  export type Medio_pagosUncheckedCreateWithoutEstado_medios_pagoInput = {
+    Id_pago?: number
+    Nombre_pago?: string | null
+    Ventas?: VentasUncheckedCreateNestedManyWithoutMedio_pagosInput
+  }
+
+  export type Medio_pagosCreateOrConnectWithoutEstado_medios_pagoInput = {
+    where: Medio_pagosWhereUniqueInput
+    create: XOR<Medio_pagosCreateWithoutEstado_medios_pagoInput, Medio_pagosUncheckedCreateWithoutEstado_medios_pagoInput>
+  }
+
+  export type Medio_pagosCreateManyEstado_medios_pagoInputEnvelope = {
+    data: Medio_pagosCreateManyEstado_medios_pagoInput | Medio_pagosCreateManyEstado_medios_pagoInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type Medio_pagosUpsertWithWhereUniqueWithoutEstado_medios_pagoInput = {
+    where: Medio_pagosWhereUniqueInput
+    update: XOR<Medio_pagosUpdateWithoutEstado_medios_pagoInput, Medio_pagosUncheckedUpdateWithoutEstado_medios_pagoInput>
+    create: XOR<Medio_pagosCreateWithoutEstado_medios_pagoInput, Medio_pagosUncheckedCreateWithoutEstado_medios_pagoInput>
+  }
+
+  export type Medio_pagosUpdateWithWhereUniqueWithoutEstado_medios_pagoInput = {
+    where: Medio_pagosWhereUniqueInput
+    data: XOR<Medio_pagosUpdateWithoutEstado_medios_pagoInput, Medio_pagosUncheckedUpdateWithoutEstado_medios_pagoInput>
+  }
+
+  export type Medio_pagosUpdateManyWithWhereWithoutEstado_medios_pagoInput = {
+    where: Medio_pagosScalarWhereInput
+    data: XOR<Medio_pagosUpdateManyMutationInput, Medio_pagosUncheckedUpdateManyWithoutEstado_medios_pagoInput>
+  }
+
+  export type Medio_pagosScalarWhereInput = {
+    AND?: Medio_pagosScalarWhereInput | Medio_pagosScalarWhereInput[]
+    OR?: Medio_pagosScalarWhereInput[]
+    NOT?: Medio_pagosScalarWhereInput | Medio_pagosScalarWhereInput[]
+    Id_pago?: IntFilter<"Medio_pagos"> | number
+    Nombre_pago?: StringNullableFilter<"Medio_pagos"> | string | null
+    Id_estado_medio_pago?: IntNullableFilter<"Medio_pagos"> | number | null
   }
 
   export type UsuariosCreateManyCargosInput = {
@@ -18191,6 +19604,27 @@ export namespace Prisma {
     Id_producto?: IntFieldUpdateOperationsInput | number
     Cantidad?: NullableIntFieldUpdateOperationsInput | number | null
     Precio_total?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+  }
+
+  export type Medio_pagosCreateManyEstado_medios_pagoInput = {
+    Id_pago?: number
+    Nombre_pago?: string | null
+  }
+
+  export type Medio_pagosUpdateWithoutEstado_medios_pagoInput = {
+    Nombre_pago?: NullableStringFieldUpdateOperationsInput | string | null
+    Ventas?: VentasUpdateManyWithoutMedio_pagosNestedInput
+  }
+
+  export type Medio_pagosUncheckedUpdateWithoutEstado_medios_pagoInput = {
+    Id_pago?: IntFieldUpdateOperationsInput | number
+    Nombre_pago?: NullableStringFieldUpdateOperationsInput | string | null
+    Ventas?: VentasUncheckedUpdateManyWithoutMedio_pagosNestedInput
+  }
+
+  export type Medio_pagosUncheckedUpdateManyWithoutEstado_medios_pagoInput = {
+    Id_pago?: IntFieldUpdateOperationsInput | number
+    Nombre_pago?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
 

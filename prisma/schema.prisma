@@ -58,9 +58,13 @@ model Lote_productos {
 }
 
 model Medio_pagos {
-  Id_pago     Int      @id @default(autoincrement())
-  Nombre_pago String?  @db.VarChar(255)
-  Ventas      Ventas[]
+  Id_pago              Int                 @id @default(autoincrement())
+  Nombre_pago          String?             @db.VarChar(255)
+  Id_estado_medio_pago Int?                @default(1)
+  Estado_medios_pago   Estado_medios_pago? @relation(fields: [Id_estado_medio_pago], references: [Id_estado_medio_pago], onDelete: NoAction, onUpdate: NoAction, map: "Medio_pagos_ibfk_1")
+  Ventas               Ventas[]
+
+  @@index([Id_estado_medio_pago], map: "Id_estado_medio_pago")
 }
 
 model Operacion {
@@ -124,4 +128,10 @@ model Ventas {
   @@index([Id_estado_venta], map: "Id_estado_venta")
   @@index([Id_pago], map: "Id_pago")
   @@index([Id_usuario], map: "Id_usuario")
+}
+
+model Estado_medios_pago {
+  Id_estado_medio_pago     Int           @id
+  Nombre_estado_medio_pago String?       @db.VarChar(255)
+  Medio_pagos              Medio_pagos[]
 }
