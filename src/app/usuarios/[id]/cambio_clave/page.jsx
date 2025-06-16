@@ -4,18 +4,18 @@ import FormCambioClave from "@/components/usuarios/FormCambioClave";
 
 export default async function CambioClavePage({ params }) {
   const user = await getUserFromToken();
+  const { id } = await params; // ✅ Ahora con await
 
-  console.log({ user, params });
   if (!user) {
     redirect("/login");
   }
 
-  // Validar que params.id exista y sea string
-  if (!params?.id || typeof params.id !== "string") {
+  // Validar que id exista y sea string
+  if (!id || typeof id !== "string") {
     notFound();
   }
 
-  const idFromUrl = params.id;
+  const idFromUrl = id;
   const idFromToken = user.Id_usuario.toString();
 
   if (idFromUrl !== idFromToken) {
@@ -27,7 +27,7 @@ export default async function CambioClavePage({ params }) {
       <h2 className="text-2xl font-bold mb-4 text-center">
         Cambiar Contraseña
       </h2>
-      <FormCambioClave userId={user.id} />
+      <FormCambioClave userId={user.Id_usuario} />
     </div>
   );
 }
