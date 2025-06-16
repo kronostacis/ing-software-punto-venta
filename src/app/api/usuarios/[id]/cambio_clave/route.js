@@ -1,16 +1,22 @@
 import { NextResponse } from "next/server";
 import { ChangePasswordSchema } from "@/validations/userSchema";
 import jwt from "jsonwebtoken";
-import { getUserHashById, updatePasswordUserById } from "@/app/lib/db/usuarios";
+import {
+  getUserHashById,
+  updatePasswordUserById,
+  userExist,
+} from "@/app/lib/db/usuarios";
 import argon2 from "argon2";
 import { cookies } from "next/headers";
 
-export async function POST(request, { params }) {
+export async function PUT(request, { params }) {
   try {
     const { id } = await params;
 
     const body = await request.json();
-    const accessToken = cookies().get("accessToken")?.value;
+    const cookieStore = await cookies();
+    const accessTokenCookie = cookieStore.get("accessToken");
+    const accessToken = accessTokenCookie?.value;
 
     if (!accessToken) {
       return NextResponse.json({ error: "No autorizado" }, { status: 401 });
@@ -22,16 +28,41 @@ export async function POST(request, { params }) {
     if (tokenId != parseInt(id))
       return NextResponse.json({ error: "No autorizado 1" }, { status: 401 });
 
-    await ChangePasswordSchema.validate(body, { abortEarly: false });
+    // Validar esquema
+    try {
+      await ChangePasswordSchema.validate(body, { abortEarly: false });
+    } catch (validationError) {
+      return NextResponse.json(
+        {
+          error: "Datos de entrada inválidos",
+          details: validationError.errors,
+        },
+        { status: 400 }
+      );
+    }
 
+    // Obtener usuario
     const userRecord = await getUserHashById(tokenId);
+    if (!userRecord) {
+      return NextResponse.json(
+        { error: "Usuario no encontrado" },
+        { status: 404 }
+      );
+    }
 
     const { Contrasena, Nueva_contrasena } = body;
-    const passwordMatch = await argon2.verify(
-      userRecord.Contrasena,
-      Contrasena
-    );
 
+    // Verificar contraseña actual
+    let passwordMatch = false;
+    try {
+      passwordMatch = await argon2.verify(userRecord.Contrasena, Contrasena);
+    } catch (verifyError) {
+      console.error("Error al verificar contraseña:", verifyError);
+      return NextResponse.json(
+        { error: "Error interno del servidor" },
+        { status: 500 }
+      );
+    }
     if (!passwordMatch) {
       return NextResponse.json(
         { error: "La contraseña actual es incorrecta" },
@@ -39,6 +70,7 @@ export async function POST(request, { params }) {
       );
     }
 
+    // Hash de la nueva contraseña
     const hashedNewPassword = await argon2.hash(Nueva_contrasena, {
       type: argon2.argon2id,
       memoryCost: 65536,
@@ -47,6 +79,7 @@ export async function POST(request, { params }) {
       hashLength: 64,
     });
 
+    // Actualizar contraseña
     const updatedUser = await updatePasswordUserById(tokenId, {
       Contrasena: hashedNewPassword,
     });
@@ -56,6 +89,20 @@ export async function POST(request, { params }) {
       { status: 200 }
     );
   } catch (error) {
-    return NextResponse.json({ error: error.message }, { status: 400 });
+    console.error("Error general:", error);
+
+    // Manejo específico de errores JWT
+    if (error.name === "JsonWebTokenError") {
+      return NextResponse.json({ error: "Token inválido" }, { status: 401 });
+    }
+
+    if (error.name === "TokenExpiredError") {
+      return NextResponse.json({ error: "Token expirado" }, { status: 401 });
+    }
+
+    return NextResponse.json(
+      { error: "Error interno del servidor" },
+      { status: 500 }
+    );
   }
 }

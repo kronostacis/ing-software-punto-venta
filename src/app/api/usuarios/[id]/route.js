@@ -6,8 +6,9 @@ import {
   updateUserById,
 } from "@/app/lib/db/usuarios";
 
-export async function GET(request, { params }) {
-  const { id } = params;
+// GET: Obtener usuario por ID
+export async function GET(request, context) {
+  const { id } = await context.params;
   const userId = parseInt(id);
 
   try {
@@ -15,94 +16,60 @@ export async function GET(request, { params }) {
     if (!user) {
       return NextResponse.json(
         { success: false, message: "Usuario no encontrado" },
-        {
-          status: 404,
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
+        { status: 404 }
       );
     }
 
-    return NextResponse.json(user, {
-      status: 200,
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    return NextResponse.json(user, { status: 200 });
   } catch (error) {
     console.error("Error al obtener usuario:", error);
     return NextResponse.json(
       { success: false, message: "Error al obtener usuario" },
-      {
-        status: 500,
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
+      { status: 500 }
     );
   }
 }
 
-export async function DELETE(request, { params }) {
-  const { id } = params;
+// DELETE: Eliminar usuario por ID
+export async function DELETE(request, context) {
+  const { id } = await context.params;
   const userId = parseInt(id);
 
   try {
-    deleteUserById(userId);
+    await deleteUserById(userId);
     return NextResponse.json(
       { success: true, message: "Usuario eliminado correctamente" },
-      {
-        status: 200,
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
+      { status: 200 }
     );
   } catch (error) {
     console.error("Error al eliminar usuario:", error);
     return NextResponse.json(
       { success: false, message: "Error al eliminar usuario" },
-      {
-        status: 500,
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
+      { status: 500 }
     );
   }
 }
 
-export async function PUT(request, { params }) {
-  try {
-    const { id } = await params;
-    const userId = parseInt(id);
+// PUT: Actualizar usuario por ID
+export async function PUT(request, context) {
+  const { id } = await context.params;
+  const userId = parseInt(id);
 
+  try {
     const data = await request.json();
-    console.log(data);
 
     await UpdateUserSchema.validate(data, {
       abortEarly: false,
     });
 
-    console.log("aca");
-
     const updatedUser = await updateUserById(userId, data);
-    return NextResponse.json(updatedUser, {
-      status: 200,
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-  } catch (errors) {
+
+    return NextResponse.json(updatedUser, { status: 200 });
+  } catch (error) {
+    console.error("Error al actualizar usuario:", error);
     return NextResponse.json(
-      { success: false, message: "Error al actualizar usuario", errors },
-      {
-        status: 400,
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
+      { success: false, message: "Error al actualizar usuario", error },
+      { status: 400 }
     );
   }
 }

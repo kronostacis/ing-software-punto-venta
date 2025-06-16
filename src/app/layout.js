@@ -1,10 +1,18 @@
-// app/layout.js o app/layout.tsx
-import "./globals.css"; // Importar el CSS global
+// app/layout.js
+import "./globals.css";
+import NavBar from "@/components/NavBar";
+import { getUserFromToken } from "./lib/auth";
+import { headers } from "next/headers";
 
-export default function RootLayout({ children }) {
+export default async function RootLayout({ children }) {
+  const user = await getUserFromToken();
+
   return (
     <html lang="es">
-      <body>{children}</body>
+      <body>
+        {<NavBar id={user?.Id_usuario} />}
+        {children}
+      </body>
     </html>
   );
 }
