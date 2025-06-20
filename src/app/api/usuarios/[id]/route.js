@@ -9,7 +9,7 @@ import {
 export async function GET(request, { params }) {
   const { id } = params;
   const userId = parseInt(id);
-
+  
   try {
     const user = await getUserById(userId);
     if (!user) {
