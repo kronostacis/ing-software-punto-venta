@@ -51,3 +51,20 @@ export async function updateMedio_PagoById(id, data) {
     return { success: false, message: "No se pudo modificar el metodo de pago" };
   }
 }
+
+export async function updateMedio_pagoStateById(id, state) {
+  try {
+    const Medio_pago = await prisma.Medio_pagos.update({
+      where: { Id_pago: id },
+      data: { Id_estado_medio_pago: state },
+    });
+
+    return { success: true, Medio_pago: Medio_pago };
+  } catch (error) {
+    console.error("Error al actualizar el estado del medio de pago:", error);
+    return {
+      success: false,
+      message: "No se pudo actualizar el estado del medio de pago",
+    };
+  }
+}
