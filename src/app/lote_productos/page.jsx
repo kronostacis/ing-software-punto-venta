@@ -1,4 +1,4 @@
-import ViewUsuarios from "@/components/usuarios/ViewUsuarios";
+import ViewLotes from "@/components/lote_productos/ViewLotes";
 import { redirect } from "next/navigation"; // Usa esta, NO "next/dist/server/api-utils"
 import { getUserFromToken } from "@/app/lib/auth";
 
@@ -10,7 +10,7 @@ export default async function Home() {
   }
 
   if (user.Cargo === 1) {
-    return <ViewUsuarios />;
+    return <ViewLotes />;
   }
 
   redirect("/not-found"); // ✅ sin return

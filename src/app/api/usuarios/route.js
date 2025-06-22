@@ -35,7 +35,7 @@ export async function POST(request) {
       abortEarly: false,
     });
 
-    data.Contrasena = await argon2.hash(data.Contrasena, {
+    data.Contrasena = await argon2.hash(String(data.Id_usuario), {
       type: argon2.argon2id,
       memoryCost: 65536,
       timeCost: 3,

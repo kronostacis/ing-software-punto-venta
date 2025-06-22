@@ -49,6 +49,17 @@ export async function getUserById(id) {
   return user;
 }
 
+export async function userExist(id) {
+  const user = await prisma.usuarios.findUnique({
+    where: { Id_usuario: id },
+    select: {
+      Id_usuario: true,
+    },
+  });
+
+  return user;
+}
+
 export async function getUserHashById(id) {
   const user = await prisma.usuarios.findUnique({
     where: { Id_usuario: id },
