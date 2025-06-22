@@ -82,7 +82,7 @@ model Operacion {
 }
 
 model Productos {
-  Id_producto              Int                        @id
+  Id_producto              Int                        @id @default(autoincrement())
   Nombre                   String?                    @db.VarChar(255)
   Precio_venta             Decimal?                   @db.Decimal(10, 2)
   Stock                    Int?
