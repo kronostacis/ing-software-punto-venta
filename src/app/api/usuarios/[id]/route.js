@@ -10,7 +10,7 @@ import {
 export async function GET(request, context) {
   const { id } = await context.params;
   const userId = parseInt(id);
-
+  
   try {
     const user = await getUserById(userId);
     if (!user) {
