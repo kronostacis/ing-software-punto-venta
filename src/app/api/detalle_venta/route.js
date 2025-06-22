@@ -1,17 +1,17 @@
 // toda la logica de la venta
-import { SellSchema } from "@/validations/sellSchema";
+import { detailSaleSchema } from "@/validations/detailSaleSchema";
 import { NextResponse } from "next/server";
 //importar funciones
-import { newSale } from "@/app/lib/db/realizar_venta";
+import { newDetailSale } from "@/app/lib/db/realizar_venta";
 
 export async function POST(request) {
   try {
     var data = await request.json();
-    await SellSchema.validate(data, {
+    await detailSaleSchema.validate(data, {
       abortEarly: false,
     });
 
-    const sale = await newSale(data);
+    const sale = await newDetailSale(data);
 
     return NextResponse.json(sale, {
       status: 201,
