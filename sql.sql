@@ -194,6 +194,7 @@ BEGIN
         SELECT Id_producto, SUM(Stock) AS NuevoStock
         FROM Lote_productos
         WHERE Id_producto = NEW.Id_producto
+        GROUP BY Id_producto
     ) AS SumarStock
     ON p.Id_producto = SumarStock.Id_producto
     SET p.Stock = SumarStock.NuevoStock;
@@ -209,6 +210,7 @@ BEGIN
         SELECT Id_producto, IFNULL(SUM(Stock), 0) AS NuevoStock
         FROM Lote_productos
         WHERE Id_producto = OLD.Id_producto
+        GROUP BY Id_producto
     ) AS SumarStock
     ON p.Id_producto = SumarStock.Id_producto
     SET p.Stock = SumarStock.NuevoStock
@@ -226,6 +228,7 @@ BEGIN
             SELECT Id_producto, SUM(Stock) AS NuevoStock
             FROM Lote_productos
             WHERE Id_producto = NEW.Id_producto
+            GROUP BY Id_producto
         ) AS SumarStock
         ON p.Id_producto = SumarStock.Id_producto
         SET p.Stock = SumarStock.NuevoStock

@@ -10836,7 +10836,7 @@ export namespace Prisma {
     /**
      * The data needed to create a Productos.
      */
-    data: XOR<ProductosCreateInput, ProductosUncheckedCreateInput>
+    data?: XOR<ProductosCreateInput, ProductosUncheckedCreateInput>
   }
 
   /**
@@ -16433,7 +16433,6 @@ export namespace Prisma {
   }
 
   export type ProductosCreateInput = {
-    Id_producto: number
     Nombre?: string | null
     Precio_venta?: Decimal | DecimalJsLike | number | string | null
     Stock?: number | null
@@ -16442,7 +16441,7 @@ export namespace Prisma {
   }
 
   export type ProductosUncheckedCreateInput = {
-    Id_producto: number
+    Id_producto?: number
     Nombre?: string | null
     Precio_venta?: Decimal | DecimalJsLike | number | string | null
     Stock?: number | null
@@ -16451,7 +16450,6 @@ export namespace Prisma {
   }
 
   export type ProductosUpdateInput = {
-    Id_producto?: IntFieldUpdateOperationsInput | number
     Nombre?: NullableStringFieldUpdateOperationsInput | string | null
     Precio_venta?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     Stock?: NullableIntFieldUpdateOperationsInput | number | null
@@ -16469,14 +16467,13 @@ export namespace Prisma {
   }
 
   export type ProductosCreateManyInput = {
-    Id_producto: number
+    Id_producto?: number
     Nombre?: string | null
     Precio_venta?: Decimal | DecimalJsLike | number | string | null
     Stock?: number | null
   }
 
   export type ProductosUpdateManyMutationInput = {
-    Id_producto?: IntFieldUpdateOperationsInput | number
     Nombre?: NullableStringFieldUpdateOperationsInput | string | null
     Precio_venta?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     Stock?: NullableIntFieldUpdateOperationsInput | number | null
@@ -18386,7 +18383,6 @@ export namespace Prisma {
   }
 
   export type ProductosCreateWithoutDetalle_ventas_productosInput = {
-    Id_producto: number
     Nombre?: string | null
     Precio_venta?: Decimal | DecimalJsLike | number | string | null
     Stock?: number | null
@@ -18394,7 +18390,7 @@ export namespace Prisma {
   }
 
   export type ProductosUncheckedCreateWithoutDetalle_ventas_productosInput = {
-    Id_producto: number
+    Id_producto?: number
     Nombre?: string | null
     Precio_venta?: Decimal | DecimalJsLike | number | string | null
     Stock?: number | null
@@ -18443,7 +18439,6 @@ export namespace Prisma {
   }
 
   export type ProductosUpdateWithoutDetalle_ventas_productosInput = {
-    Id_producto?: IntFieldUpdateOperationsInput | number
     Nombre?: NullableStringFieldUpdateOperationsInput | string | null
     Precio_venta?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     Stock?: NullableIntFieldUpdateOperationsInput | number | null
@@ -18595,7 +18590,6 @@ export namespace Prisma {
   }
 
   export type ProductosCreateWithoutLote_productosInput = {
-    Id_producto: number
     Nombre?: string | null
     Precio_venta?: Decimal | DecimalJsLike | number | string | null
     Stock?: number | null
@@ -18603,7 +18597,7 @@ export namespace Prisma {
   }
 
   export type ProductosUncheckedCreateWithoutLote_productosInput = {
-    Id_producto: number
+    Id_producto?: number
     Nombre?: string | null
     Precio_venta?: Decimal | DecimalJsLike | number | string | null
     Stock?: number | null
@@ -18627,7 +18621,6 @@ export namespace Prisma {
   }
 
   export type ProductosUpdateWithoutLote_productosInput = {
-    Id_producto?: IntFieldUpdateOperationsInput | number
     Nombre?: NullableStringFieldUpdateOperationsInput | string | null
     Precio_venta?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     Stock?: NullableIntFieldUpdateOperationsInput | number | null

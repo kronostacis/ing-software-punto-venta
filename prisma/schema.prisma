@@ -85,7 +85,7 @@ model Productos {
   Id_producto              Int                        @id
   Nombre                   String?                    @db.VarChar(255)
   Precio_venta             Decimal?                   @db.Decimal(10, 2)
-  Stock                    Int?
+  Stock                    Int?                    
   Detalle_ventas_productos Detalle_ventas_productos[]
   Lote_productos           Lote_productos[]
 }
