@@ -36,8 +36,9 @@ export async function addProduct(data) {
   
 
 export async function getProductById(id) {
+  const id_int = parseInt(id)
   const user = await prisma.productos.findUnique({
-    where: { Id_producto: id },
+    where: { Id_producto: id_int },
     select: {
       Id_producto: true,
       Nombre: true,

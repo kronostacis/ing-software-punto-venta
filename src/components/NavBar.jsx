@@ -12,6 +12,7 @@ export default function NavBar({ id }) {
   const links = [
     { href: "/productos", label: "Productos" },
     { href: "/realizar_venta", label: "Realizar Venta" },
+    { href: "/lista_ventas", label: "Lista de Ventas" },
     { href: "/lote_productos", label: "Lote Productos" },
     { href: "/usuarios", label: "Usuarios" },
     { href: `/usuarios/${id}/cambio_clave`, label: "Cambio de Clave" }, // Ojo con el espacio al final

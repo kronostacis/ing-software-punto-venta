@@ -58,6 +58,9 @@ export async function getLoteById(id) {
 export async function updateLoteById(id, data) {
   try {
     // Obtener el lote actual
+    console.log("ID lote:",id);
+    console.log("data lote:",data);
+    
     const loteExistente = await prisma.lote_productos.findUnique({
       where: { Id_lote: id },
     });
