@@ -1,7 +1,6 @@
 import * as yup from "yup";
 
 const CreateMedio_pagosSchema = yup.object({
-  Id_pago: yup.number().required("El id de pago es obligatorio"),
   Nombre_pago: yup.string().required("El nombre de pago es obligatorio").max(40),
 });
 

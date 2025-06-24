@@ -1,4 +1,4 @@
-// ver todos los medios de pago
+// ver y crear todos los medios de pago
 import { CreateMedio_pagosSchema } from "@/validations/Medio_pagosSchema";
 import { NextResponse } from "next/server";
 import { getAllMedio_pago, createMedio_pago } from "@/app/lib/db/medio_pago";
