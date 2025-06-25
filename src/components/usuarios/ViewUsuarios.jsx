@@ -263,10 +263,6 @@ export default function ViewUsuarios() {
                     usuario={usuario}
                     onToggle={handleEstadoChange}
                   />
-
-                  <button className="ml-2 text-red-600 hover:text-red-800">
-                    Eliminar
-                  </button>
                 </td>
               </tr>
             ))}
