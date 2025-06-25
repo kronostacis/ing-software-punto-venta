@@ -41,5 +41,16 @@ export const UpdateLoteSchema = yup.object({
     ),
 });
 
+export const UpdateLoteStock = yup.object({
+  Stock: yup
+    .number()
+    .required("El stock es obligatorio")
+    .typeError("El stock debe ser un número")
+    .max(
+      yup.ref("Cantidad"),
+      "El stock no puede ser mayor que la cantidad total del lote"
+    ),
+});
 
-export { CreateLoteSchema, UpdateLoteSchema };
+
+export { CreateLoteSchema, UpdateLoteSchema, UpdateLoteStock };
