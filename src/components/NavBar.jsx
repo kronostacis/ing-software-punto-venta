@@ -7,7 +7,8 @@ export default function NavBar({ id }) {
   const pathname = usePathname();
   const router = useRouter();
 
-  if (pathname === "/login" || pathname === "/not-found") return null;
+  if (pathname === "/login" || pathname === "/not-found" || pathname === "/")
+    return null;
 
   const links = [
     { href: "/productos", label: "Productos" },
