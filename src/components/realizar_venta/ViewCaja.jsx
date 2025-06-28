@@ -1,6 +1,8 @@
 "use client";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import Swal from 'sweetalert2'
+
 
 export default function RealizarVenta( id_user ) {
   const [productos, setProductos] = useState([]);
@@ -30,7 +32,11 @@ export default function RealizarVenta( id_user ) {
         {headers: { "Content-Type": "application/json" },
           withCredentials: true,});
       if (resProducto.status !== 200) {
-        alert("Producto no encontrado");
+        Swal.fire({
+        icon: "error",
+        title: "Producto no encontrado.",
+        text: "Por favor revisar que el código se haya ingresado correctamente.",
+      });
         return;
       }
 
@@ -39,7 +45,11 @@ export default function RealizarVenta( id_user ) {
 
       const resLotes = await axios.get(`/api/get_lote/${id}`);
       if (resLotes.status !== 200) {
-        alert("Error al obtener lotes del producto");
+        Swal.fire({
+        icon: "error",
+        title: "Error al encontrar el lote.",
+        text: "Por favor contactar a administración.",
+      });
         return;
       }
 
@@ -69,8 +79,21 @@ export default function RealizarVenta( id_user ) {
 
     setCodigoProducto(""); // limpiar input
     } catch (error) {
+    if (axios.isAxiosError(error) && error.response?.status === 404) {
+      Swal.fire({
+        icon: "error",
+        title: "Producto no encontrado.",
+        text: "Por favor revisar que el código se haya ingresado correctamente.",
+      });
+    } else {
       console.error("Error al agregar producto:", error);
+      Swal.fire({
+        icon: "error",
+        title: "Error inesperado",
+        text: "Ocurrió un error al intentar agregar el producto.",
+      });
     }
+  }
   };
 
   const eliminarProductoPorId = (id) => {
@@ -102,6 +125,13 @@ export default function RealizarVenta( id_user ) {
     try {
       
       let utilidad = 0;
+      if(medioPagoSeleccionado == null){
+        Swal.fire({
+          title: "No ha seleccionado el medio de pago.",
+          icon: "question",
+        });
+        return;
+      }
 
       for (const producto of productos) {
         const cantidadNecesaria = producto.cantidad;
@@ -110,7 +140,11 @@ export default function RealizarVenta( id_user ) {
 
         const stockTotal = lotes.reduce((acc, lote) => acc + lote.Stock, 0);
         if (stockTotal < cantidadNecesaria) {
-          alert(`Stock insuficiente para el producto "${producto.nombre}"`);
+          //alert(`Stock insuficiente para el producto "${producto.nombre}"`);
+          Swal.fire({
+            title: `Stock insuficiente para el producto "${producto.Nombre}"`,
+            icon: "error",
+        });
           return;
         }
 
@@ -169,51 +203,68 @@ export default function RealizarVenta( id_user ) {
         });
       }
 
-      alert("Venta realizada correctamente");
+      Swal.fire({
+        title: "Venta realizada correctamente.",
+        icon: "success"
+      });
       setProductos([]);
       setMedioPagoSeleccionado(null);
       setTotal(0);
     } catch (error) {
       console.error("Error al realizar la venta: ", error);
-      alert("Error al realizar la venta.");
+      Swal.fire({
+        icon: "error",
+        title: "Error al realizar la venta.",
+        text: "SPor favor, ponerse en contacto con la administración",
+      });
     }
   };
 
   return (
-    <div style={{ padding: "1rem" }}>
-      <h2>Realizar Venta</h2>
+    <div className="max-w-4xl mx-auto mt-6 p-6 bg-gray-100 rounded-lg shadow">
+      <h2 className="text-2xl font-bold mb-4">🛒 Realizar Venta</h2>
 
-      {/* Input para agregar producto por código */}
-      <div>
+      {/* Input producto */}
+      <div className="flex gap-2 mb-4">
         <input
           type="number"
+          className="flex-1 border border-gray-300 rounded px-3 py-2"
+          placeholder="Código del producto"
           value={codigoProducto}
           onChange={(e) => setCodigoProducto(e.target.value)}
-          placeholder="Código del producto"
         />
-        <button onClick={() => agregarProductoPorId(codigoProducto)}>
+        <button
+          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+          type="button"
+          onClick={() => agregarProductoPorId(codigoProducto)}
+        >
           Agregar
         </button>
       </div>
 
-      {/* Productos agregados */}
-      <h3>Productos en la venta</h3>
-      <ul>
+      {/* Lista de productos */}
+      <h4 className="text-lg font-semibold mb-2">🧾 Productos en la venta</h4>
+      <ul className="space-y-2 mb-4">
         {productos.map((prod) => (
-          <li key={prod.Id_producto}>
-            {prod.Nombre} - ${prod.Precio_venta} x{" "}
-            <input
-              type="number"
-              value={prod.cantidad}
-              min={1}
-              onChange={(e) =>
-                cambiarCantidad(prod.Id_producto, parseInt(e.target.value))
-              }
-              style={{ width: "50px" }}
-            />{" "}
-            = ${prod.Precio_venta * prod.cantidad}
+          <li
+            key={prod.Id_producto}
+            className="bg-white border rounded p-3 flex items-center justify-between"
+          >
+            <div className="flex-1">
+              <strong>{prod.Nombre}</strong> - ${prod.Precio_venta} x{" "}
+              <input
+                type="number"
+                className="inline-block w-20 border border-gray-300 rounded px-2 py-1 ml-2"
+                value={prod.cantidad}
+                min={1}
+                onChange={(e) =>
+                  cambiarCantidad(prod.Id_producto, parseInt(e.target.value))
+                }
+              />{" "}
+              = ${prod.Precio_venta * prod.cantidad}
+            </div>
             <button
-              style={{ marginLeft: "10px" }}
+              className="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600"
               onClick={() => eliminarProductoPorId(prod.Id_producto)}
             >
               Eliminar
@@ -223,12 +274,13 @@ export default function RealizarVenta( id_user ) {
       </ul>
 
       {/* Total */}
-      <h3>Total: ${total}</h3>
+      <h4 className="text-lg font-bold mb-4">💰 Total: ${total}</h4>
 
-      {/* Selección de medio de pago */}
-      <div>
-        <label>Medio de pago: </label>
+      {/* Medio de pago */}
+      <div className="mb-4">
+        <label className="block font-medium mb-1">Medio de pago:</label>
         <select
+          className="w-full border border-gray-300 rounded px-3 py-2"
           value={medioPagoSeleccionado || ""}
           onChange={(e) => setMedioPagoSeleccionado(parseInt(e.target.value))}
         >
@@ -241,9 +293,14 @@ export default function RealizarVenta( id_user ) {
         </select>
       </div>
 
-      {/* Botón realizar venta */}
-      <div style={{ marginTop: "1rem" }}>
-        <button onClick={realizarVenta}>Realizar venta</button>
+      {/* Botón de venta */}
+      <div className="text-center">
+        <button
+          className="bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700"
+          onClick={realizarVenta}
+        >
+          ✅ Realizar venta
+        </button>
       </div>
     </div>
   );
