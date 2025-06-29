@@ -2,7 +2,6 @@ import * as yup from "yup";
 
 // Esquema de validación con Yup
 const SellSchema = yup.object({
-  Id_venta: yup.number().required("El id de venta es obligatorio"),
   Id_pago: yup.number().required("El id de pago es obligatorio"),
   Total_venta: yup.number().required("El total de la vents es obligatorio"),
   Id_usuario: yup.number().required("El id de usuario es obligatorio"),

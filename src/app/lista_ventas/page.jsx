@@ -46,7 +46,11 @@ export default function ListaVentas() {
             className="bg-white shadow-md rounded-lg p-4 mb-4"
           >
             <h2 className="text-xl font-bold">Venta #{venta.Id_venta}</h2>
-            <p>Fecha: {venta.Fecha}</p>
+            <p>Fecha: {new Date(venta.Fecha_venta).toLocaleString("es-CL", {
+  dateStyle: "medium",
+  timeStyle: "short",
+})
+}</p>
             <p>Total: ${venta.Total_venta}</p>
             <p>Utilidad: ${venta.Utilidad_total}</p>
             <p>ID Usuario: {venta.Id_usuario}</p>

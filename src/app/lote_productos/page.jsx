@@ -9,7 +9,9 @@ export default async function Home() {
     redirect("/login"); // redirige directamente
   }
 
-  if (user.Cargo === 1) {
+  if (user.Cargo !== 3) {
+    // Puedes agregar más cargos si es necesario
+    // Si el usuario tiene el cargo adecuado, muestra la vista de lotes
     return <ViewLotes />;
   }
 

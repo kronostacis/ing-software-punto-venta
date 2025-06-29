@@ -7,6 +7,7 @@ import { newDetailSale } from "@/app/lib/db/realizar_venta";
 export async function POST(request) {
   try {
     var data = await request.json();
+    //console.log("Data:",data);
     await detailSaleSchema.validate(data, {
       abortEarly: false,
     });

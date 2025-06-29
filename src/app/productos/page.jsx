@@ -9,9 +9,7 @@ export default async function Home() {
     redirect("/login"); // redirige directamente
   }
 
-  if (user.Cargo === 1) {
-    return <ViewProductos />;
-  }
+  return <ViewProductos />;
 
   redirect("/not-found"); // ✅ sin return
 }

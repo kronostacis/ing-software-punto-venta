@@ -2,9 +2,10 @@
 import { UpdateProductSchema } from "@/validations/productSchema";
 import { NextResponse } from "next/server";
 import {getProductById,updateProductById,deleteProductById} from "@/app/lib/db/productos";
-export async function GET(req, { params }) {
-    const id = parseInt(params.id);
-  
+export async function GET(req, context) {
+    const { id } = await context.params;
+    console.log(id);
+
     const producto = await getProductById(id);
   
     if (!producto) {

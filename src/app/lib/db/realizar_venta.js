@@ -27,12 +27,18 @@ export async function getAllPayMethods() {
 }
 
 export async function newSale(data) {
-  const { Id_venta, Id_pago, Total_venta, Id_usuario, Utilidad_total, Id_estado_venta } =
+  const { Id_pago, Total_venta, Id_usuario, Utilidad_total, Id_estado_venta } =
     data;
+  
+  const ultimo = await prisma.ventas.findFirst({
+    orderBy: { Id_venta: "desc" }
+  });
 
-  const user = await prisma.ventas.create({
+  const nuevoId = ultimo ? ultimo.Id_venta + 1 : 1;
+
+  const venta = await prisma.ventas.create({
     data: {
-      Id_venta,
+      Id_venta: nuevoId,
       Id_pago,
       Total_venta,
       Id_usuario,
@@ -41,7 +47,7 @@ export async function newSale(data) {
     },
   });
 
-  return user;
+  return venta;
 }
 
 export async function newDetailSale(data) {
@@ -61,13 +67,22 @@ export async function newDetailSale(data) {
 }
 
 export async function getAllLoteByProduct(id) {
-
   const q = await prisma.lote_productos.findMany({
-    where: { Id_producto: id },
+    where: {
+      Id_producto: id,
+      Stock: {
+        gt: 0, // "greater than 0"
+      },
+    },
+    orderBy: {
+      Fecha: 'asc', // más antiguo primero
+    },
     select: {
       Id_lote: true,
       Precio_compra: true,
       Stock: true,
+      Fecha: true,
+      Cantidad: true,
     },
   });
 

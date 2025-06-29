@@ -23,12 +23,15 @@ export async function GET(req, { params }) {
 }
 
 // ACTUALIZAR STOCK DEL LOTE
-export async function PUT(request, { params }) {
+export async function PUT(request, context ) {
   try {
-    const id = parseInt(params.id);
+    var { id } = await context.params;
+    id = parseInt(id);
     const data = await request.json();
+    console.log("DAta ahora:",data);
 
     await UpdateLoteSchema.validate(data, { abortEarly: false });
+    console.log("Aquiiiiii");
 
     const result = await updateLoteById(id, data);
 
