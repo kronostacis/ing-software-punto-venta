@@ -10,6 +10,7 @@ export default function NavBar({ id }) {
   if (pathname === "/login" || pathname === "/not-found") return null;
 
   const links = [
+    { href: "/reportes", label: "Reportes" },
     { href: "/productos", label: "Productos" },
     { href: "/realizar_venta", label: "Realizar Venta" },
     { href: "/lote_productos", label: "Lote Productos" },
