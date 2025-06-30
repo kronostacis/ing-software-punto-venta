@@ -24,7 +24,9 @@ function UserAccessToggle({ usuario, onToggle }) {
     <button
       onClick={handleToggle}
       className={`w-24 text-white py-1 px-2 rounded-md text-sm focus:outline-none ${
-        isActive ? "bg-green-500 hover:bg-green-600" : "bg-red-500 hover:bg-red-600"
+        isActive
+          ? "bg-green-500 hover:bg-green-600"
+          : "bg-red-500 hover:bg-red-600"
       }`}
     >
       {isActive ? "Activado" : "Desactivado"}
@@ -68,7 +70,7 @@ function CreateUserModal({ isOpen, onClose, onUserCreated }) {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+    <div className="fixed inset-0 bg-white/30 backdrop-blur-sm flex justify-center items-center z-50">
       <div className="bg-white p-6 rounded-lg shadow-xl w-full max-w-md">
         <h2 className="text-2xl font-bold mb-4">Crear Nuevo Usuario</h2>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
@@ -249,7 +251,9 @@ export default function ViewUsuarios() {
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold text-gray-800">Gestión de Usuarios</h1>
+        <h1 className="text-3xl font-bold text-gray-800">
+          Gestión de Usuarios
+        </h1>
         <button
           onClick={() => setIsModalOpen(true)}
           className="bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 focus:outline-none"
