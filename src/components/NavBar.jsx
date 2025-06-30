@@ -38,6 +38,7 @@ export default function NavBar() {
       { href: "/realizar_venta", label: "Realizar Venta", roles: [1, 3] }, // Administrador, Cajero
       { href: "/lista_ventas", label: "Lista de Ventas", roles: [1, 2] }, // Administrador, Dueño
       { href: "/lote_productos", label: "Lote Productos", roles: [1, 2] }, // Administrador, Dueño
+      { href: "/resumen_caja", label: "Resumen Contable", roles: [1, 2] }, // Administrador, Dueño
       { href: "/medio_pago", label: "Medio de Pago", roles: [1, 2, 3] }, // Administrador, Dueño, Cajero
       { href: "/usuarios", label: "Usuarios", roles: [1] }, // Administrador
       {
