@@ -16,6 +16,7 @@ export default function NavBar({ id }) {
     { href: "/realizar_venta", label: "Realizar Venta" },
     { href: "/lista_ventas", label: "Lista de Ventas" },
     { href: "/lote_productos", label: "Lote Productos" },
+    { href: "/medio_pago", label: "Medio de Pago" },
     { href: "/usuarios", label: "Usuarios" },
     { href: `/usuarios/${id}/cambio_clave`, label: "Cambio de Clave" }, // Ojo con el espacio al final
   ];

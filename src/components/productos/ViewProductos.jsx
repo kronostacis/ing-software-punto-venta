@@ -1,34 +1,85 @@
 "use client";
-
 import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { CreateProductSchema } from "@/validations/productSchema";
 import axios from "axios";
+import Swal from "sweetalert2";
 
-export default function ViewProductos() {
-  const [productos, setProductos] = useState([]);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
-
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    reset,
-  } = useForm({
+// Modal para crear producto
+function CreateProductModal({ isOpen, onClose, onProductCreated }) {
+  const { register, handleSubmit, formState: { errors }, reset } = useForm({
     resolver: yupResolver(CreateProductSchema),
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const onSubmit = async (data) => {
+    setIsSubmitting(true);
+    try {
+      await axios.post("/api/productos", data);
+      Swal.fire("Éxito", "Producto creado correctamente", "success");
+      onProductCreated();
+      onClose();
+      reset();
+    } catch (error) {
+      const msg = error.response?.data?.message || "Error al crear el producto";
+      Swal.fire("Error", msg, "error");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  if (!isOpen) return null;
+
+  return (
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+      <div className="bg-white p-6 rounded-lg shadow-xl w-full max-w-md">
+        <h2 className="text-2xl font-bold mb-4">Agregar Nuevo Producto</h2>
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+          <div>
+            <label htmlFor="Nombre" className="block text-sm font-medium text-gray-700">Nombre</label>
+            <input id="Nombre" type="text" {...register("Nombre")}
+              className={`mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm ${
+                errors.Nombre ? "border-red-500" : "border-gray-300"
+              }`}
+            />
+            {errors.Nombre && <p className="text-red-500 text-xs mt-1">{errors.Nombre.message}</p>}
+          </div>
+          <div>
+            <label htmlFor="Precio_venta" className="block text-sm font-medium text-gray-700">Precio de Venta</label>
+            <input id="Precio_venta" type="number" {...register("Precio_venta")}
+              className={`mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm ${
+                errors.Precio_venta ? "border-red-500" : "border-gray-300"
+              }`}
+            />
+            {errors.Precio_venta && <p className="text-red-500 text-xs mt-1">{errors.Precio_venta.message}</p>}
+          </div>
+          <div className="flex justify-end space-x-4">
+            <button type="button" onClick={onClose} className="py-2 px-4 bg-gray-500 text-white rounded-md hover:bg-gray-600">
+              Cancelar
+            </button>
+            <button type="submit" disabled={isSubmitting} className="py-2 px-4 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 disabled:bg-indigo-300">
+              {isSubmitting ? "Agregando..." : "Agregar Producto"}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+}
+
+// Componente principal
+export default function ViewProductos() {
+  const [productos, setProductos] = useState([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const fetchProductos = async () => {
     try {
       const res = await axios.get("/api/productos");
-      if (res.status === 200) {
-        setProductos(res.data);
-      }
+      setProductos(res.data);
     } catch (error) {
       console.error("Error al obtener productos:", error);
+      Swal.fire("Error", "No se pudieron cargar los productos", "error");
     }
   };
 
@@ -36,144 +87,64 @@ export default function ViewProductos() {
     fetchProductos();
   }, []);
 
-  const onSubmit = async (data) => {
-    setIsSubmitting(true);
-    setError("");
-    setSuccess("");
-
-    try {
-      const response = await axios.post("/api/productos", data, {
-        headers: { "Content-Type": "application/json" },
-        withCredentials: true,
-      });
-
-      if (response.status === 200 || response.status === 201) {
-        setSuccess("Producto agregado correctamente.");
-        reset();
-        await fetchProductos(); // Esperamos a que termine de actualizar la lista
-      }
-    } catch (error) {
-      const errorMessage =
-        error.response?.data?.message ||
-        error.message ||
-        "Error al crear el producto.";
-      setError(errorMessage);
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
   const handleDelete = async (id) => {
-    const confirmacion = window.confirm("¿Deseas eliminar este producto?");
-    if (!confirmacion) return;
-
-    try {
-      const res = await axios.delete(`/api/productos/${id}`);
-      if (res.status === 200) {
-        alert("Producto eliminado correctamente.");
-        await fetchProductos(); // Actualizamos lista luego de eliminar
+    Swal.fire({
+      title: '¿Estás seguro?',
+      text: "No podrás revertir esta acción",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sí, eliminar',
+      cancelButtonText: 'Cancelar'
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          await axios.delete(`/api/productos/${id}`);
+          Swal.fire("Eliminado", "El producto ha sido eliminado.", "success");
+          fetchProductos();
+        } catch (error) {
+          Swal.fire("Error", "No se pudo eliminar el producto.", "error");
+        }
       }
-    } catch (error) {
-      alert("Error al eliminar el producto.");
-      console.error(error);
-    }
+    });
   };
 
   return (
-    <div className="p-4">
-      {/* Mensajes */}
-      {error && <div className="mb-4 p-3 bg-red-100 text-red-700 rounded">{error}</div>}
-      {success && <div className="mb-4 p-3 bg-green-100 text-green-700 rounded">{success}</div>}
-
-      {/* Formulario de producto */}
-      <div>
-        <h2 className="text-2xl font-bold mb-4">Agregar Producto</h2>
-        <form onSubmit={handleSubmit(onSubmit)}>
-          {/* Nombre */}
-          <div className="mb-4">
-            <label htmlFor="Nombre" className="block mb-1 font-medium">Nombre</label>
-            <input
-              id="Nombre"
-              type="text"
-              {...register("Nombre")}
-              className={`w-full px-3 py-2 border rounded ${
-                errors.Nombre ? "border-red-500" : "border-gray-300"
-              }`}
-              placeholder="Nombre del producto"
-            />
-            {errors.Nombre && <p className="text-sm text-red-600">{errors.Nombre.message}</p>}
-          </div>
-
-          {/* Precio de venta */}
-          <div className="mb-4">
-            <label htmlFor="Precio_venta" className="block mb-1 font-medium">Precio de Venta</label>
-            <input
-              id="Precio_venta"
-              type="number"
-              {...register("Precio_venta")}
-              className={`w-full px-3 py-2 border rounded ${
-                errors.Precio_venta ? "border-red-500" : "border-gray-300"
-              }`}
-              placeholder="Precio del producto"
-            />
-            {errors.Precio_venta && <p className="text-sm text-red-600">{errors.Precio_venta.message}</p>}
-          </div>
-
-          <button
-            type="submit"
-            disabled={isSubmitting}
-            className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 disabled:bg-blue-300"
-          >
-            {isSubmitting ? "Agregando..." : "Agregar Producto"}
-          </button>
-        </form>
+    <div className="container mx-auto px-4 py-8">
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-3xl font-bold text-gray-800">Gestión de Productos</h1>
+        <button onClick={() => setIsModalOpen(true)} className="bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 focus:outline-none">
+          Agregar Producto
+        </button>
       </div>
 
-      {/* Tabla de productos */}
-      <h2 className="text-2xl font-bold my-6">Productos Registrados</h2>
-      <div className="overflow-x-auto">
-        <table className="min-w-full bg-white border border-gray-300 rounded-lg shadow">
-          <thead>
-            <tr className="bg-black text-white text-left text-sm font-semibold">
-              <th className="px-4 py-2 border-b">ID</th>
-              <th className="px-4 py-2 border-b">Nombre</th>
-              <th className="px-4 py-2 border-b">Precio</th>
-              <th className="px-4 py-2 border-b">Stock</th>
-              <th className="px-4 py-2 border-b">Acciones</th>
+      <CreateProductModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} onProductCreated={fetchProductos} />
+
+      <div className="bg-white shadow-md rounded-lg overflow-hidden">
+        <table className="min-w-full divide-y divide-gray-200">
+          <thead className="bg-gray-50">
+            <tr>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nombre</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Precio</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Stock</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Acciones</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody className="bg-white divide-y divide-gray-200">
             {productos.map((producto) => (
-              <tr key={producto.Id_producto} className="hover:bg-gray-50">
-                <td className="px-4 py-2 border-b">{producto.Id_producto}</td>
-                <td className="px-4 py-2 border-b">{producto.Nombre}</td>
-                <td className="px-4 py-2 border-b">${producto.Precio_venta}</td>
-                <td className="px-4 py-2 border-b">{producto.Stock || 0}</td>
-                <td className="px-4 py-2 border-b">
-                  <button
-                    className="text-blue-600 hover:underline mr-2"
-                    onClick={() =>
-                      window.location.href = `/productos/${producto.Id_producto}`
-                    }
-                  >
-                    Editar
-                  </button>
-                  <button
-                    className="text-red-600 hover:underline"
-                    onClick={() => handleDelete(producto.Id_producto)}
-                  >
-                    Eliminar
-                  </button>
+              <tr key={producto.Id_producto} className="hover:bg-gray-100">
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{producto.Id_producto}</td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{producto.Nombre}</td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${producto.Precio_venta.toLocaleString()}</td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{producto.Stock || 0}</td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-4">
+                  <a href={`/productos/${producto.Id_producto}`} className="text-indigo-600 hover:text-indigo-900">Editar</a>
+                  <button onClick={() => handleDelete(producto.Id_producto)} className="text-red-600 hover:text-red-900">Eliminar</button>
                 </td>
               </tr>
             ))}
-            {productos.length === 0 && (
-              <tr>
-                <td colSpan="5" className="text-center py-4">
-                  No hay productos registrados.
-                </td>
-              </tr>
-            )}
           </tbody>
         </table>
       </div>

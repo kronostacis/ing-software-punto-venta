@@ -2,9 +2,33 @@
 import { UpdateMedio_pagosSchema } from "@/validations/Medio_pagosSchema";
 import { NextResponse } from "next/server";
 import {
+  getMedio_pagoById,
   deleteMedio_PagoById,
   updateMedio_PagoById,
 } from "@/app/lib/db/medio_pago";
+
+export async function GET(request, context) {
+  const { id } = await context.params;
+  const medioPagoId = parseInt(id);
+
+  try {
+    const medioPago = await getMedio_pagoById(medioPagoId);
+    if (!medioPago) {
+      return NextResponse.json(
+        { success: false, message: "Medio de pago no encontrado" },
+        { status: 404 }
+      );
+    }
+
+    return NextResponse.json(medioPago, { status: 200 });
+  } catch (error) {
+    console.error("Error al obtener medio de pago:", error);
+    return NextResponse.json(
+      { success: false, message: "Error al obtener medio de pago" },
+      { status: 500 }
+    );
+  }
+}
 
 export async function DELETE(request, { params }) {
   const { id } = params;
@@ -38,17 +62,12 @@ export async function DELETE(request, { params }) {
 export async function PUT(request, { params }) {
   try {
     const { id } = await params;
-    console.log(id);
     const Medio_pago_Id = parseInt(id);
-    console.log('aca 0');
     const data = await request.json();
-    console.log(data);
 
     await UpdateMedio_pagosSchema.validate(data, {
       abortEarly: false,
     });
-
-    console.log("aca");
 
     const updatedMedioPago = await updateMedio_PagoById(Medio_pago_Id, data);
     return NextResponse.json(updatedMedioPago, {

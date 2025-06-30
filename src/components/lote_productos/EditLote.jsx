@@ -1,22 +1,21 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { UpdateLoteSchema } from "@/validations/loteSchema";
 import axios from "axios";
 import { useParams, useRouter } from "next/navigation";
+import Swal from "sweetalert2";
 
 export default function EditLote() {
   const { id } = useParams();
   const router = useRouter();
-  const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
 
   const {
     register,
     handleSubmit,
     setValue,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm({
     resolver: yupResolver(UpdateLoteSchema),
   });
@@ -24,70 +23,57 @@ export default function EditLote() {
   useEffect(() => {
     const fetchLote = async () => {
       try {
-        const res = await axios.get(`/api/lote_productos/${id}`);
-        const lote = res.data;
-
-        setValue("Id_producto", lote.Id_producto);
-        setValue("Precio_compra", lote.Precio_compra);
-        setValue("Cantidad", lote.Cantidad);
-        setValue("Stock", lote.Stock);
+        const { data } = await axios.get(`/api/lote_productos/${id}`);
+        setValue("Stock", data.Stock);
       } catch (err) {
-        setError("No se pudo cargar el lote");
+        Swal.fire("Error", "No se pudo cargar el lote", "error");
       }
     };
-
     fetchLote();
   }, [id, setValue]);
 
   const onSubmit = async (data) => {
-    setError("");
-    setSuccess("");
-
     try {
       await axios.put(`/api/lote_productos/${id}`, data);
-      setSuccess("Lote actualizado correctamente.");
-
-      // Esperar 1.5 segundos y volver atrás
-      setTimeout(() => {
-        router.back();
-      }, 1500);
+      Swal.fire({
+        title: "Éxito",
+        text: "Lote actualizado correctamente.",
+        icon: "success",
+        timer: 1500,
+        showConfirmButton: false,
+      });
+      router.push("/lote_productos");
     } catch (err) {
-      const message =
-        err.response?.data?.message || "Error al actualizar el lote producto";
-      setError(message);
+      const message = err.response?.data?.message || "Error al actualizar";
+      Swal.fire("Error", message, "error");
     }
   };
 
   return (
-    <div className="p-6 max-w-xl mx-auto">
-      <h2 className="text-2xl font-bold mb-4">Editar lote de producto</h2>
+    <div className="container mx-auto px-4 py-8">
+      <div className="max-w-xl mx-auto bg-white p-8 rounded-lg shadow-md">
+        <h1 className="text-3xl font-bold text-gray-800 mb-6">Editar Lote</h1>
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+          <div>
+            <label htmlFor="Stock" className="block text-sm font-medium text-gray-700">Stock</label>
+            <input id="Stock" type="number" {...register("Stock")}
+              className={`mt-1 block w-full px-4 py-2 border rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm ${
+                errors.Stock ? "border-red-500" : "border-gray-300"
+              }`}
+            />
+            {errors.Stock && <p className="text-red-500 text-xs mt-1">{errors.Stock.message}</p>}
+          </div>
 
-      {error && <div className="bg-red-100 p-3 mb-4 text-red-700">{error}</div>}
-      {success && (
-        <div className="bg-green-100 p-3 mb-4 text-green-700">{success}</div>
-      )}
-
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="mb-4">
-          <label className="block font-medium mb-1">Stock</label>
-          <input
-            {...register("Stock")}
-            className={`w-full px-3 py-2 border ${
-              errors.Stock ? "border-red-500" : "border-gray-300"
-            } rounded`}
-          />
-          {errors.Stock && (
-            <p className="text-sm text-red-600">{errors.Stock.message}</p>
-          )}
-        </div>
-
-        <button
-          type="submit"
-          className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700"
-        >
-          Guardar cambios
-        </button>
-      </form>
+          <div className="flex justify-end space-x-4">
+            <button type="button" onClick={() => router.back()} className="py-2 px-4 bg-gray-500 text-white rounded-md hover:bg-gray-600">
+              Cancelar
+            </button>
+            <button type="submit" disabled={isSubmitting} className="py-2 px-4 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 disabled:bg-indigo-300">
+              {isSubmitting ? "Guardando..." : "Guardar Cambios"}
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
   );
 }

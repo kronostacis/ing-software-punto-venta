@@ -11,6 +11,19 @@ export async function getAllMedio_pago() {
   return q;
 }
 
+export async function getMedio_pagoById(id) {
+  const medioPago = await prisma.Medio_pagos.findUnique({
+    where: {
+      Id_pago: id,
+    },
+    select: {
+      Id_pago: true,
+      Nombre_pago: true,
+    },
+  });
+  return medioPago;
+}
+
 export async function createMedio_pago(data) {
   const { Nombre_pago} =
     data;
