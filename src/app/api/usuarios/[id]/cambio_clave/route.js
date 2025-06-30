@@ -9,9 +9,10 @@ import {
 import argon2 from "argon2";
 import { cookies } from "next/headers";
 
-export async function PUT(request, { params }) {
+export async function PUT(request, context) {
   try {
-    const { id } = await params;
+    var { id } = await context.params;
+    id = parseInt(id);
 
     const body = await request.json();
     const cookieStore = await cookies();

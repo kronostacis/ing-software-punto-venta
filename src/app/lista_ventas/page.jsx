@@ -1,6 +1,7 @@
 "use client";
-import axios from "axios";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import axios from "axios";
 
 // Modal para mostrar el detalle de la venta
 function DetalleVentaModal({ venta, detalle, onClose }) {
@@ -60,12 +61,37 @@ export default function ListaVentas() {
   const [detalle, setDetalle] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [viewMode, setViewMode] = useState('card'); // 'card' or 'table'
+  const router = useRouter();
+  const [userRole, setUserRole] = useState(null);
 
   useEffect(() => {
-    axios.get("/api/ventas")
-      .then(res => setVentas(res.data))
-      .catch(error => console.error("Error en la solicitud:", error));
-  }, []);
+    const fetchUserRole = async () => {
+      try {
+        const res = await axios.get("/api/usuarios/session");
+        if (res.status === 200) {
+          setUserRole(res.data.cargo);
+        } else {
+          router.push("/login");
+        }
+      } catch (error) {
+        console.error("Error fetching user role:", error);
+        router.push("/login");
+      }
+    };
+    fetchUserRole();
+  }, [router]);
+
+  useEffect(() => {
+    if (userRole !== null) {
+      if (userRole !== 1 && userRole !== 2) {
+        router.push("/not-found");
+      } else {
+        axios.get("/api/ventas")
+          .then(res => setVentas(res.data))
+          .catch(error => console.error("Error en la solicitud:", error));
+      }
+    }
+  }, [userRole, router]);
 
   const verDetalle = async (venta) => {
     setSelectedVenta(venta);
@@ -102,6 +128,14 @@ export default function ListaVentas() {
       alert("Error al descargar el comprobante.");
     }
   };
+
+  if (userRole === null) {
+    return <div>Cargando...</div>; // O un spinner de carga
+  }
+
+  if (userRole !== 1 && userRole !== 2) {
+    return null; // No renderizar nada si no tiene permisos, ya se redirigió
+  }
 
   return (
     <div className="container mx-auto px-4 py-8">

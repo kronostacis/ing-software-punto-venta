@@ -60,7 +60,7 @@ function CreateMedioPagoModal({ isOpen, onClose, onMedioPagoCreated }) {
 }
 
 // Componente principal
-export default function ViewMedioPagos() {
+export default function ViewMedioPagos({ userRole }) {
   const [medioPagos, setMedioPagos] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -105,9 +105,11 @@ export default function ViewMedioPagos() {
     <div className="container mx-auto px-4 py-8">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-3xl font-bold text-gray-800">Gestión de Medios de Pago</h1>
-        <button onClick={() => setIsModalOpen(true)} className="bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 focus:outline-none">
-          Agregar Medio de Pago
-        </button>
+        {userRole !== 3 && (
+          <button onClick={() => setIsModalOpen(true)} className="bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 focus:outline-none">
+            Agregar Medio de Pago
+          </button>
+        )}
       </div>
 
       <CreateMedioPagoModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} onMedioPagoCreated={fetchMedioPagos} />
@@ -118,7 +120,9 @@ export default function ViewMedioPagos() {
             <tr>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nombre</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Acciones</th>
+              {userRole !== 3 && (
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Acciones</th>
+              )}
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
@@ -126,10 +130,12 @@ export default function ViewMedioPagos() {
               <tr key={pago.Id_pago} className="hover:bg-gray-100">
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{pago.Id_pago}</td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{pago.Nombre_pago}</td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-4">
-                  <a href={`/medio_pago/${pago.Id_pago}`} className="text-indigo-600 hover:text-indigo-900">Editar</a>
-                  <button onClick={() => handleDelete(pago.Id_pago)} className="text-red-600 hover:text-red-900">Eliminar</button>
-                </td>
+                {userRole !== 3 && (
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-4">
+                    <a href={`/medio_pago/${pago.Id_pago}`} className="text-indigo-600 hover:text-indigo-900">Editar</a>
+                    <button onClick={() => handleDelete(pago.Id_pago)} className="text-red-600 hover:text-red-900">Eliminar</button>
+                  </td>
+                )}
               </tr>
             ))}
           </tbody>

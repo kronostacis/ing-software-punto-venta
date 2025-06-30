@@ -9,9 +9,9 @@ export default async function Home() {
     redirect("/login"); // redirige directamente
   }
 
-  if (user.Cargo === 1) {
+  if (user.cargo === 1) {
     return <ViewUsuarios />;
   }
 
-  redirect("/not-found"); // ✅ sin return
+  redirect("/not-found");
 }

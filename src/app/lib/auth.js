@@ -17,7 +17,11 @@ export async function getUserFromToken() {
     if (!userId) return null;
 
     const user = await getUserById(userId);
-    return user ?? null;
+    if (user) {
+      return { id: user.Id_usuario, cargo: user.Cargo };
+    } else {
+      return null;
+    }
   } catch (error) {
     console.error("Token inválido o expirado:", error);
     return null;

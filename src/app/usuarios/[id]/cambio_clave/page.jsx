@@ -16,7 +16,7 @@ export default async function CambioClavePage({ params }) {
   }
 
   const idFromUrl = id;
-  const idFromToken = user.Id_usuario.toString();
+  const idFromToken = user.id.toString();
 
   if (idFromUrl !== idFromToken) {
     notFound();

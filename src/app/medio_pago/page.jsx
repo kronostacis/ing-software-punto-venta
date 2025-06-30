@@ -9,9 +9,5 @@ export default async function Home() {
     redirect("/login");
   }
 
-  if (user.Cargo === 1 || user.Cargo === 2) {
-    return <ViewMedioPagos />;
-  }
-
-  redirect("/not-found");
+  return <ViewMedioPagos userRole={user.cargo} />;
 }

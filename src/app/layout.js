@@ -10,7 +10,7 @@ export default async function RootLayout({ children }) {
   return (
     <html lang="es">
       <body>
-        {<NavBar id={user?.Id_usuario} />}
+        {<NavBar />}
         {children}
       </body>
     </html>

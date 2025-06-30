@@ -69,7 +69,7 @@ function CreateProductModal({ isOpen, onClose, onProductCreated }) {
 }
 
 // Componente principal
-export default function ViewProductos() {
+export default function ViewProductos({ userRole }) {
   const [productos, setProductos] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -114,9 +114,11 @@ export default function ViewProductos() {
     <div className="container mx-auto px-4 py-8">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-3xl font-bold text-gray-800">Gestión de Productos</h1>
-        <button onClick={() => setIsModalOpen(true)} className="bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 focus:outline-none">
-          Agregar Producto
-        </button>
+        {userRole !== 3 && (
+          <button onClick={() => setIsModalOpen(true)} className="bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 focus:outline-none">
+            Agregar Producto
+          </button>
+        )}
       </div>
 
       <CreateProductModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} onProductCreated={fetchProductos} />
@@ -129,7 +131,9 @@ export default function ViewProductos() {
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nombre</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Precio</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Stock</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Acciones</th>
+              {userRole !== 3 && (
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Acciones</th>
+              )}
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
@@ -139,10 +143,12 @@ export default function ViewProductos() {
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{producto.Nombre}</td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${producto.Precio_venta.toLocaleString()}</td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{producto.Stock || 0}</td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-4">
-                  <a href={`/productos/${producto.Id_producto}`} className="text-indigo-600 hover:text-indigo-900">Editar</a>
-                  <button onClick={() => handleDelete(producto.Id_producto)} className="text-red-600 hover:text-red-900">Eliminar</button>
-                </td>
+                {userRole !== 3 && (
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-4">
+                    <a href={`/productos/${producto.Id_producto}`} className="text-indigo-600 hover:text-indigo-900">Editar</a>
+                    <button onClick={() => handleDelete(producto.Id_producto)} className="text-red-600 hover:text-red-900">Eliminar</button>
+                  </td>
+                )}
               </tr>
             ))}
           </tbody>
