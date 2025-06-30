@@ -20,6 +20,27 @@ export async function getAllSales() {
   return q;
 }
 
+export async function getSaleById(id) {
+  const q = await prisma.Ventas.findUnique({
+    where: { Id_venta: id },
+    select: {
+      Id_venta: true,
+      Id_pago: true,
+      Total_venta: true,
+      Fecha_venta: true,
+      Id_usuario: true,
+      Utilidad_total: true,
+      Id_estado_venta: true,
+      Detalle_ventas_productos: true,
+      Estado_ventas: true,
+      Medio_pagos: true,
+      Usuarios: true,
+    },
+  });
+
+  return q;
+}
+
 /*
 export async function getDetailSale(id) {
   const q = await prisma.Detalle_ventas_productos.findMany({

@@ -85,6 +85,24 @@ export default function ListaVentas() {
     setDetalle(null);
   };
 
+  const handleDownloadReceipt = async (saleId) => {
+    try {
+      const response = await axios.get(`/api/generate_receipt/${saleId}`, {
+        responseType: 'blob', // Important for downloading files
+      });
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', `comprobante_venta_${saleId}.pdf`);
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+    } catch (error) {
+      console.error("Error downloading receipt:", error);
+      alert("Error al descargar el comprobante.");
+    }
+  };
+
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="flex justify-between items-center mb-6">
@@ -125,12 +143,20 @@ export default function ListaVentas() {
                   <p className="flex justify-between"><strong>Atendido por:</strong> <span className="font-semibold">{venta.Usuarios.Nombre}</span></p>
                   <p className="flex justify-between"><strong>Medio de Pago:</strong> <span className="font-semibold">{venta.Medio_pagos.Nombre_pago}</span></p>
                 </div>
-                <button
-                  onClick={() => verDetalle(venta)}
-                  className="mt-4 w-full bg-indigo-600 text-white py-2 rounded-md hover:bg-indigo-700 focus:outline-none"
-                >
-                  Ver Detalle
-                </button>
+                <div className="mt-4 flex space-x-2">
+                  <button
+                    onClick={() => verDetalle(venta)}
+                    className="flex-1 bg-indigo-600 text-white py-2 rounded-md hover:bg-indigo-700 focus:outline-none"
+                  >
+                    Ver Detalle
+                  </button>
+                  <button
+                    onClick={() => handleDownloadReceipt(venta.Id_venta)}
+                    className="flex-1 bg-green-600 text-white py-2 rounded-md hover:bg-green-700 focus:outline-none"
+                  >
+                    Descargar Comprobante
+                  </button>
+                </div>
               </div>
             </div>
           ))}
@@ -171,9 +197,15 @@ export default function ListaVentas() {
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                     <button
                       onClick={() => verDetalle(venta)}
-                      className="text-indigo-600 hover:text-indigo-900"
+                      className="text-indigo-600 hover:text-indigo-900 mr-4"
                     >
                       Ver Detalle
+                    </button>
+                    <button
+                      onClick={() => handleDownloadReceipt(venta.Id_venta)}
+                      className="text-green-600 hover:text-green-900"
+                    >
+                      Descargar
                     </button>
                   </td>
                 </tr>
