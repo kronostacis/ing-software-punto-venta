@@ -40,11 +40,12 @@ export default function NavBar() {
       { href: "/lote_productos", label: "Lote Productos", roles: [1, 2] }, // Administrador, Dueño
       { href: "/medio_pago", label: "Medio de Pago", roles: [1, 2, 3] }, // Administrador, Dueño, Cajero
       { href: "/usuarios", label: "Usuarios", roles: [1] }, // Administrador
+      { href: "/resumen_caja", label: "Resumen Caja", roles: [1, 2] }, // Administrador, Dueño
       {
         href: `/usuarios/${userId}/cambio_clave`,
         label: "Cambio de Clave",
         roles: [1, 2, 3],
-      }, // Todos
+      }, // Todos,
     ];
 
     if (!role) return [];

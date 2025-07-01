@@ -86,7 +86,7 @@ CREATE TABLE `Medio_pagos` (
 
 CREATE TABLE `Productos` (
     `Id_producto` INT NOT NULL,
-    `Nombre` VARCHAR(255),
+    `Nombre` VARCHAR(255) UNIQUE,
     `Precio_venta` DECIMAL(10,2),
     `Stock` INT,
     PRIMARY KEY (`Id_producto`)

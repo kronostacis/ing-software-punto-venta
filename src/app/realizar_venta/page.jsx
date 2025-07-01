@@ -8,10 +8,10 @@ export default async function Home() {
   if (!user) {
     redirect("/login"); // redirige directamente
   }
-  if(user){
-    console.log("ID aca :",user?.Id_usuario);
-    return <RealizarVenta id={user?.Id_usuario} />
+  if (user) {
+    console.log("ID aca :", user.id);
+    return <RealizarVenta id={user?.id} />;
   }
-  
+
   redirect("/not-found"); // ✅ sin return
 }

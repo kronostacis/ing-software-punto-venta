@@ -56,30 +56,38 @@ export default function Home() {
   }
 
   return (
-    <div className="flex flex-col items-center min-h-screen px-4 sm:px-20 py-10 bg-gray-50">
-      <h1 className="text-3xl font-bold text-center mb-10">Seccion de Reportes</h1>
+    <div className="min-h-screen bg-gray-100 p-4 sm:p-8">
+      <div className="max-w-6xl mx-auto bg-white shadow-lg rounded-lg p-6 sm:p-8">
+        <h1 className="text-4xl font-extrabold text-center text-gray-800 mb-8">Panel de Reportes</h1>
 
-      <div className="w-full max-w-6xl flex flex-col gap-10">
-        <GraficoBarra
-          title="Ventas Diarias"
-          data={ventasDiarias}
-          xKey="fecha"
-          yKey="total"
-        />
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
+          <div className="bg-gray-50 p-6 rounded-lg shadow-md">
+            <GraficoBarra
+              title="Ventas Diarias"
+              data={ventasDiarias}
+              xKey="fecha"
+              yKey="total"
+            />
+          </div>
 
-        <GraficoBarra
-          title="Ventas Mensuales"
-          data={ventasMensuales}
-          xKey="Mes"
-          yKey="Total"
-        />
+          <div className="bg-gray-50 p-6 rounded-lg shadow-md">
+            <GraficoBarra
+              title="Ventas Mensuales"
+              data={ventasMensuales}
+              xKey="Mes"
+              yKey="Total"
+            />
+          </div>
 
-        <GraficoBarra
-          title="Ventas por Medio de Pago"
-          data={ventasPorPago}
-          xKey="metodo"
-          yKey="total"
-        />
+          <div className="bg-gray-50 p-6 rounded-lg shadow-md">
+            <GraficoBarra
+              title="Ventas por Medio de Pago"
+              data={ventasPorPago}
+              xKey="metodo"
+              yKey="total"
+            />
+          </div>
+        </div>
       </div>
     </div>
   );

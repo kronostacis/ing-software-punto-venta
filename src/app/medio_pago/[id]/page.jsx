@@ -9,7 +9,7 @@ export default async function Home({ params }) {
     redirect("/login");
   }
 
-  if (user.Cargo === 1 || user.Cargo === 2) {
+  if (user.cargo === 1 || user.cargo === 2) {
     return <EditMedioPagos id={params.id} />;
   }
 

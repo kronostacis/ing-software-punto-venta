@@ -200,7 +200,12 @@ export default function ViewLotes() {
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold text-gray-800">Gestión de Lotes</h1>
+        <h1 className="text-3xl font-bold text-gray-800 mb-6 flex items-center">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="brown" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-8 h-8 mr-3">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M20.25 7.5l-.625 10.632a2.25 2.25 0 01-2.247 2.118H6.622a2.25 2.25 0 01-2.247-2.118L3.75 7.5M10.5 11.25h3m-6 9v-6a2.25 2.25 0 012.25-2.25h10.5a2.25 2.25 0 012.25 2.25v6M13.5 7.5h3.375c.621 0 1.125.504 1.125 1.125v.375m-4.5-1.5h-1.5m-6.75 0H10.5" />
+        </svg>
+        Gestión de Lotes
+      </h1>
         <button
           onClick={() => setIsModalOpen(true)}
           className="bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 focus:outline-none"
