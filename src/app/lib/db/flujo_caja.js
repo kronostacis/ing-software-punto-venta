@@ -79,17 +79,5 @@ export async function getCaja() {
     },
   });
 
-
-  const egresos = await prisma.Lote_productos.findMany({
-    select: {
-      Precio_compra: true,
-      Cantidad: true,
-    },
-  });
-
-  const total_egresos = egresos.reduce((acc, producto) => {
-    return acc + (producto.Precio_compra * producto.Cantidad);
-  }, 0);
-
-  return ingresos._sum.Total_venta - total_egresos;
+  return ingresos._sum.Total_venta;
 }

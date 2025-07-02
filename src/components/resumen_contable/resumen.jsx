@@ -96,15 +96,18 @@ export default function Resumen_contable() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
           <div className="bg-blue-100 p-4 rounded-lg shadow-md">
             <p className="text-gray-700 text-sm">Ingresos:</p>
-            <p className="text-xl font-semibold text-blue-900">{Ingresos !== null && typeof Ingresos === 'number' && !isNaN(Ingresos) ? `${Ingresos.toFixed(2)}` : "Cargando..."}</p>
+            <p className="text-xl font-semibold text-blue-900">{Ingresos !== null && typeof Ingresos === 'number' && !isNaN(Ingresos) ? Ingresos.toLocaleString("es-CL", { style: "currency", currency: "CLP" })
+  : "Cargando..."}</p>
           </div>
           <div className="bg-red-100 p-4 rounded-lg shadow-md">
             <p className="text-gray-700 text-sm">Egresos:</p>
-            <p className="text-xl font-semibold text-red-900">{Egresos !== null && typeof Egresos === 'number' && !isNaN(Egresos) ? `${Egresos.toFixed(2)}` : "Cargando..."}</p>
+            <p className="text-xl font-semibold text-red-900">{Egresos !== null && typeof Egresos === 'number' && !isNaN(Egresos) ? Egresos.toLocaleString("es-CL", { style: "currency", currency: "CLP" })
+  : "Cargando..."}</p>
           </div>
           <div className="bg-green-100 p-4 rounded-lg shadow-md">
             <p className="text-gray-700 text-sm">Utilidad:</p>
-            <p className="text-xl font-semibold text-green-900">{Utilidad !== null && typeof Utilidad === 'number' && !isNaN(Utilidad) ? `${Utilidad.toFixed(2)}` : "Cargando..."}</p>
+            <p className="text-xl font-semibold text-green-900">{Utilidad !== null && typeof Utilidad === 'number' && !isNaN(Utilidad) ? Utilidad.toLocaleString("es-CL", { style: "currency", currency: "CLP" })
+  : "Cargando..."}</p>
           </div>
         </div>
 
@@ -112,11 +115,13 @@ export default function Resumen_contable() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="bg-teal-100 p-4 rounded-lg shadow-md">
             <p className="text-gray-700 text-sm">Caja:</p>
-            <p className="text-xl font-semibold text-teal-900">{Caja !== null && typeof Caja === 'number' && !isNaN(Caja) ? `${Caja.toFixed(2)}` : "Cargando..."}</p>
+            <p className="text-xl font-semibold text-teal-900">{Caja !== null && typeof Caja === 'number' && !isNaN(Caja) ? Caja.toLocaleString("es-CL", { style: "currency", currency: "CLP" })
+  : "Cargando..."}</p>
           </div>
           <div className="bg-yellow-100 p-4 rounded-lg shadow-md">
             <p className="text-gray-700 text-sm">Inventario:</p>
-            <p className="text-xl font-semibold text-yellow-900">{Inventario !== null && typeof Inventario === 'number' && !isNaN(Inventario) ? `${Inventario.toFixed(2)}` : "Cargando..."}</p>
+            <p className="text-xl font-semibold text-yellow-900">{Inventario !== null && typeof Inventario === 'number' && !isNaN(Inventario) ? Inventario.toLocaleString("es-CL", { style: "currency", currency: "CLP" })
+  : "Cargando..."}</p>
           </div>
         </div>
       </div>
