@@ -1,8 +1,20 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+
+// Íconos de Lucide
+import {
+  FileText,
+  Package,
+  ShoppingCart,
+  Users,
+  KeyRound,
+  LogOut,
+  Wallet,
+} from "lucide-react";
 
 export default function NavBar() {
   const pathname = usePathname();
@@ -27,26 +39,54 @@ export default function NavBar() {
     fetchUser();
   }, []);
 
-  if (pathname === "/login" || pathname === "/not-found" || pathname === "/")
+  if (
+    pathname === "/login" ||
+    pathname === "/not-found" ||
+    pathname === "/"
+  )
     return null;
 
-  console.log("User data:", user);
   const getFilteredLinks = (role, userId) => {
     const allLinks = [
-      { href: "/reportes", label: "Reportes", roles: [1, 2] }, // Administrador, Dueño
-      { href: "/productos", label: "Productos", roles: [1, 2, 3] }, // Administrador, Dueño, Cajero
-      { href: "/realizar_venta", label: "Realizar Venta", roles: [1, 3] }, // Administrador, Cajero
-      { href: "/lista_ventas", label: "Lista de Ventas", roles: [1, 2] }, // Administrador, Dueño
-      { href: "/lote_productos", label: "Lote Productos", roles: [1, 2] }, // Administrador, Dueño
-      { href: "/resumen_caja", label: "Resumen Contable", roles: [1, 2] }, // Administrador, Dueño
-      { href: "/medio_pago", label: "Medio de Pago", roles: [1, 2, 3] }, // Administrador, Dueño, Cajero
-      { href: "/usuarios", label: "Usuarios", roles: [1] }, // Administrador
-      { href: "/resumen_caja", label: "Resumen Caja", roles: [1, 2] }, // Administrador, Dueño
+      { href: "/reportes", label: "Reportes", roles: [1, 2], icon: FileText },
+      { href: "/productos", label: "Productos", roles: [1, 2, 3], icon: Package },
+      {
+        href: "/realizar_venta",
+        label: "Realizar Venta",
+        roles: [1, 2, 3],
+        icon: ShoppingCart,
+      },
+      {
+        href: "/lista_ventas",
+        label: "Lista de Ventas",
+        roles: [1, 2],
+        icon: FileText,
+      },
+      {
+        href: "/lote_productos",
+        label: "Lote Productos",
+        roles: [1, 2],
+        icon: Package,
+      },
+      {
+        href: "/resumen_caja",
+        label: "Resumen Caja",
+        roles: [1, 2],
+        icon: FileText,
+      },
+      {
+        href: "/medio_pago",
+        label: "Medio de Pago",
+        roles: [1, 2, 3],
+        icon: Wallet,
+      },
+      { href: "/usuarios", label: "Usuarios", roles: [1], icon: Users },
       {
         href: `/usuarios/${userId}/cambio_clave`,
         label: "Cambio de Clave",
         roles: [1, 2, 3],
-      }, // Todos,
+        icon: KeyRound,
+      },
     ];
 
     if (!role) return [];
@@ -70,28 +110,39 @@ export default function NavBar() {
 
   return (
     <nav className="bg-blue-600 text-white p-4">
-      <ul className="flex space-x-6 max-w-6xl mx-auto items-center">
-        {filteredLinks.map(({ href, label }) => (
-          <li key={label}>
-            <Link
-              href={href}
-              className={`hover:text-yellow-300 ${
-                pathname === href ? "font-bold underline" : ""
-              }`}
+      <div className="flex justify-between items-center">
+
+        {/* Menú con íconos y rebote */}
+        <ul className="flex space-x-6 items-center">
+          {filteredLinks.map(({ href, label, icon: Icon }) => {
+            const isActive = pathname === href;
+            return (
+              <li key={label}>
+                <Link
+                  href={href}
+                  className={`flex items-center gap-1 px-3 py-1 rounded-md transform transition duration-200 ease-out ${
+                  isActive
+                    ? "bg-white/30 text-white shadow-inner scale-100"
+                    : "hover:animate-bounce hover:scale-105 hover:bg-white/20 active:scale-95"
+                }`}
+                >
+                  {Icon && <Icon className="w-4 h-4" />}
+                  {label}
+                </Link>
+              </li>
+            );
+          })}
+          <li>
+            <button
+              onClick={handleLogout}
+              className="flex items-center gap-1 px-3 py-1 rounded-md font-semibold bg-red-600 hover:bg-red-700 transform transition duration-200 ease-out hover:scale-105 active:scale-95"
             >
-              {label}
-            </Link>
+              <LogOut className="w-4 h-4" />
+              Cerrar Sesión
+            </button>
           </li>
-        ))}
-        <li>
-          <button
-            onClick={handleLogout}
-            className="hover:text-yellow-300 font-semibold"
-          >
-            Cerrar Sesión
-          </button>
-        </li>
-      </ul>
+        </ul>
+      </div>
     </nav>
   );
 }

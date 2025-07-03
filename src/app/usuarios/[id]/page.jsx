@@ -81,7 +81,7 @@ export default function Home() {
 
   return (
     <div>
-      <h2 className="text-2xl font-bold mb-4">Crear Usuario</h2>
+      <h2 className="text-2xl font-bold mb-4">Editar Usuario</h2>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div>
           <label
