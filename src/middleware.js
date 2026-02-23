@@ -64,6 +64,11 @@ export const config = {
     "/ventas",
     "/usuarios",
     "/productos",
-    //"/api/usuarios",
+    "/reportes",
+    "/realizar_venta",
+    "/lista_ventas",
+    "/lote_productos",
+    "/resumen_caja",
+    "/medio_pago",
   ],
 };

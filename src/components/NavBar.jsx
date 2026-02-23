@@ -59,8 +59,7 @@ export default function NavBar() {
       {
         href: "/lista_ventas",
         label: "Lista de Ventas",
-        roles: [1, 2],
-        icon: FileText,
+        roles: [1, 2, 3],        icon: FileText,
       },
       {
         href: "/lote_productos",
@@ -120,10 +119,10 @@ export default function NavBar() {
               <li key={label}>
                 <Link
                   href={href}
-                  className={`flex items-center gap-1 px-3 py-1 rounded-md transform transition duration-200 ease-out ${
+                  className={`flex items-center gap-1 px-3 py-1 rounded-md ${
                   isActive
-                    ? "bg-white/30 text-white shadow-inner scale-100"
-                    : "hover:animate-bounce hover:scale-105 hover:bg-white/20 active:scale-95"
+                    ? "bg-white/30 text-white shadow-inner"
+                    : ""
                 }`}
                 >
                   {Icon && <Icon className="w-4 h-4" />}
@@ -135,7 +134,7 @@ export default function NavBar() {
           <li>
             <button
               onClick={handleLogout}
-              className="flex items-center gap-1 px-3 py-1 rounded-md font-semibold bg-red-600 hover:bg-red-700 transform transition duration-200 ease-out hover:scale-105 active:scale-95"
+              className="flex items-center gap-1 px-3 py-1 rounded-md font-semibold bg-red-600"
             >
               <LogOut className="w-4 h-4" />
               Cerrar Sesión

@@ -18,4 +18,4 @@ export const CreateProductSchema = yup.object().shape({
   Precio_venta: yup.number().typeError("Debe ser un número"),
 });
 
-export { CreateProductSchema, UpdateProductSchema };
+export { UpdateProductSchema };

@@ -5,6 +5,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { CreateProductSchema } from "@/validations/productSchema";
 import axios from "axios";
 import Swal from "sweetalert2";
+import { Search } from "lucide-react";
 
 // Modal para crear producto
 function CreateProductModal({ isOpen, onClose, onProductCreated }) {
@@ -109,6 +110,9 @@ function CreateProductModal({ isOpen, onClose, onProductCreated }) {
 export default function ViewProductos({ userRole }) {
   const [productos, setProductos] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
 
   const fetchProductos = async () => {
     try {
@@ -123,6 +127,25 @@ export default function ViewProductos({ userRole }) {
   useEffect(() => {
     fetchProductos();
   }, []);
+
+  // Filtrar productos por búsqueda
+  const filteredProductos = productos.filter((producto) =>
+    producto.Nombre.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  // Paginación
+  const totalPages = Math.ceil(filteredProductos.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const paginatedProductos = filteredProductos.slice(
+    startIndex,
+    startIndex + itemsPerPage
+  );
+
+  // Resetear página al buscar
+  const handleSearch = (e) => {
+    setSearchTerm(e.target.value);
+    setCurrentPage(1);
+  };
 
   const handleDelete = async (id) => {
     Swal.fire({
@@ -147,6 +170,21 @@ export default function ViewProductos({ userRole }) {
     });
   };
 
+  // Generar rango de páginas visibles
+  const getPageNumbers = () => {
+    const pages = [];
+    const maxVisible = 5;
+    let start = Math.max(1, currentPage - Math.floor(maxVisible / 2));
+    let end = Math.min(totalPages, start + maxVisible - 1);
+    if (end - start + 1 < maxVisible) {
+      start = Math.max(1, end - maxVisible + 1);
+    }
+    for (let i = start; i <= end; i++) {
+      pages.push(i);
+    }
+    return pages;
+  };
+
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="flex justify-between items-center mb-6">
@@ -168,6 +206,20 @@ export default function ViewProductos({ userRole }) {
         onClose={() => setIsModalOpen(false)}
         onProductCreated={fetchProductos}
       />
+
+      {/* Buscador */}
+      <div className="mb-4">
+        <div className="relative">
+          <input
+            type="text"
+            placeholder="Buscar producto por nombre..."
+            value={searchTerm}
+            onChange={handleSearch}
+            className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm"
+          />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+        </div>
+      </div>
 
       <div className="bg-white shadow-md rounded-lg overflow-hidden">
         <table className="min-w-full divide-y divide-gray-200">
@@ -193,41 +245,97 @@ export default function ViewProductos({ userRole }) {
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
-            {productos.map((producto) => (
-              <tr key={producto.Id_producto} className="hover:bg-gray-100">
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                  {producto.Id_producto}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                  {producto.Nombre}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                  ${producto.Precio_venta.toLocaleString()}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                  {producto.Stock || 0}
-                </td>
-                {userRole !== 3 && (
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-4">
-                    <a
-                      href={`/productos/${producto.Id_producto}`}
-                      className="text-indigo-600 hover:text-indigo-900"
-                    >
-                      Editar
-                    </a>
-                    <button
-                      onClick={() => handleDelete(producto.Id_producto)}
-                      className="text-red-600 hover:text-red-900"
-                    >
-                      Eliminar
-                    </button>
+            {paginatedProductos.length > 0 ? (
+              paginatedProductos.map((producto) => (
+                <tr key={producto.Id_producto} className="hover:bg-gray-100">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                    {producto.Id_producto}
                   </td>
-                )}
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                    {producto.Nombre}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    ${producto.Precio_venta.toLocaleString("es-CL")}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    {producto.Stock || 0}
+                  </td>
+                  {userRole !== 3 && (
+                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-4">
+                      <a
+                        href={`/productos/${producto.Id_producto}`}
+                        className="text-indigo-600 hover:text-indigo-900"
+                      >
+                        Editar
+                      </a>
+                      <button
+                        onClick={() => handleDelete(producto.Id_producto)}
+                        className="text-red-600 hover:text-red-900"
+                      >
+                        Eliminar
+                      </button>
+                    </td>
+                  )}
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td
+                  colSpan={userRole !== 3 ? 5 : 4}
+                  className="px-6 py-8 text-center text-sm text-gray-500"
+                >
+                  {searchTerm
+                    ? "No se encontraron productos que coincidan con la búsqueda."
+                    : "No hay productos registrados."}
+                </td>
               </tr>
-            ))}
+            )}
           </tbody>
         </table>
       </div>
+
+      {/* Paginación */}
+      {totalPages > 1 && (
+        <div className="flex items-center justify-between mt-4 px-2">
+          <p className="text-sm text-gray-600">
+            Mostrando {startIndex + 1}–
+            {Math.min(startIndex + itemsPerPage, filteredProductos.length)} de{" "}
+            {filteredProductos.length} producto
+            {filteredProductos.length !== 1 ? "s" : ""}
+          </p>
+          <div className="flex items-center gap-1">
+            <button
+              onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+              disabled={currentPage === 1}
+              className="px-3 py-1 text-sm rounded-md border border-gray-300 bg-white text-gray-700 disabled:opacity-40 disabled:cursor-not-allowed hover:bg-gray-50"
+            >
+              Anterior
+            </button>
+            {getPageNumbers().map((page) => (
+              <button
+                key={page}
+                onClick={() => setCurrentPage(page)}
+                className={`px-3 py-1 text-sm rounded-md border ${
+                  currentPage === page
+                    ? "bg-indigo-600 text-white border-indigo-600"
+                    : "bg-white text-gray-700 border-gray-300 hover:bg-gray-50"
+                }`}
+              >
+                {page}
+              </button>
+            ))}
+            <button
+              onClick={() =>
+                setCurrentPage((p) => Math.min(totalPages, p + 1))
+              }
+              disabled={currentPage === totalPages}
+              className="px-3 py-1 text-sm rounded-md border border-gray-300 bg-white text-gray-700 disabled:opacity-40 disabled:cursor-not-allowed hover:bg-gray-50"
+            >
+              Siguiente
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

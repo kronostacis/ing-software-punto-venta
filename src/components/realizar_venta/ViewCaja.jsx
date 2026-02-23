@@ -121,10 +121,18 @@ export default function RealizarVenta( id_user ) {
   }, [productos]);
 
   const realizarVenta = async () => {
-    //console.log("Medio de pago:", id_user);
     try {
       
       let utilidad = 0;
+
+      if (productos.length === 0) {
+        Swal.fire({
+          title: "Debe agregar al menos un producto.",
+          icon: "warning",
+        });
+        return;
+      }
+
       if(medioPagoSeleccionado == null){
         Swal.fire({
           title: "No ha seleccionado el medio de pago.",
@@ -251,7 +259,7 @@ export default function RealizarVenta( id_user ) {
             className="bg-white border rounded p-3 flex items-center justify-between"
           >
             <div className="flex-1">
-              <strong>{prod.Nombre}</strong> - ${prod.Precio_venta} x{" "}
+              <strong>{prod.Nombre}</strong> - ${prod.Precio_venta.toLocaleString("es-CL")} x{" "}
               <input
                 type="number"
                 className="inline-block w-20 border border-gray-300 rounded px-2 py-1 ml-2"
@@ -261,7 +269,7 @@ export default function RealizarVenta( id_user ) {
                   cambiarCantidad(prod.Id_producto, parseInt(e.target.value))
                 }
               />{" "}
-              = ${prod.Precio_venta * prod.cantidad}
+              = ${(prod.Precio_venta * prod.cantidad).toLocaleString("es-CL")}
             </div>
             <button
               className="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600"
@@ -274,7 +282,7 @@ export default function RealizarVenta( id_user ) {
       </ul>
 
       {/* Total */}
-      <h4 className="text-lg font-bold mb-4">💰 Total: ${total}</h4>
+      <h4 className="text-lg font-bold mb-4">💰 Total: ${total.toLocaleString("es-CL")}</h4>
 
       {/* Medio de pago */}
       <div className="mb-4">

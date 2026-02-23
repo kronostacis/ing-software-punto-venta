@@ -15,6 +15,7 @@ export async function getAllSales() {
       Medio_pagos: true,
       Usuarios: true,
     },
+    orderBy: { Fecha_venta: "desc" },
   });
 
   return q;

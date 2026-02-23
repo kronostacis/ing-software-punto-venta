@@ -53,4 +53,5 @@ export const UpdateLoteStock = yup.object({
 });
 
 
-export { CreateLoteSchema, UpdateLoteSchema, UpdateLoteStock };
+
+export { CreateLoteSchema };

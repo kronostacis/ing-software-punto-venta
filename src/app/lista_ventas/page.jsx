@@ -33,13 +33,13 @@ function DetalleVentaModal({ venta, detalle, onClose }) {
           <p>
             <strong>Total:</strong>{" "}
             <span className="font-semibold text-lg text-green-600">
-              ${venta.Total_venta.toLocaleString()}
+              ${venta.Total_venta.toLocaleString("es-CL")}
             </span>
           </p>
           <p>
             <strong>Utilidad:</strong>{" "}
             <span className="font-semibold text-blue-600">
-              ${venta.Utilidad_total.toLocaleString()}
+              ${venta.Utilidad_total.toLocaleString("es-CL")}
             </span>
           </p>
           <p>
@@ -68,7 +68,7 @@ function DetalleVentaModal({ venta, detalle, onClose }) {
                     </p>
                   </div>
                   <p className="font-semibold text-gray-800">
-                    ${item.Precio_total.toLocaleString()}
+                    ${item.Precio_total.toLocaleString("es-CL")}
                   </p>
                 </div>
               ))
@@ -96,16 +96,27 @@ export default function ListaVentas() {
   const [selectedVenta, setSelectedVenta] = useState(null);
   const [detalle, setDetalle] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [viewMode, setViewMode] = useState("card"); // 'card' or 'table'
+  const [viewMode, setViewMode] = useState("table");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [selectedUser, setSelectedUser] = useState("");
+  const itemsPerPage = 10;
+
+  // Export states
+  const [exportDesde, setExportDesde] = useState("");
+  const [exportHasta, setExportHasta] = useState("");
+  const [exportUser, setExportUser] = useState("");
+  const [exporting, setExporting] = useState(false);
   const router = useRouter();
   const [userRole, setUserRole] = useState(null);
+  const [userId, setUserId] = useState(null);
 
   useEffect(() => {
-    const fetchUserRole = async () => {
+    const fetchSession = async () => {
       try {
         const res = await axios.get("/api/usuarios/session");
         if (res.status === 200) {
           setUserRole(res.data.cargo);
+          setUserId(res.data.id);
         } else {
           router.push("/login");
         }
@@ -114,21 +125,57 @@ export default function ListaVentas() {
         router.push("/login");
       }
     };
-    fetchUserRole();
+    fetchSession();
   }, [router]);
 
   useEffect(() => {
     if (userRole !== null) {
-      if (userRole !== 1 && userRole !== 2) {
+      if (userRole !== 1 && userRole !== 2 && userRole !== 3) {
         router.push("/not-found");
       } else {
         axios
           .get("/api/ventas")
-          .then((res) => setVentas(res.data))
+          .then((res) => {
+            let data = res.data;
+            // Role 3 (cajero) solo ve sus propias ventas
+            if (userRole === 3 && userId) {
+              data = data.filter((v) => v.Id_usuario === userId);
+            }
+            setVentas(data);
+          })
           .catch((error) => console.error("Error en la solicitud:", error));
       }
     }
-  }, [userRole, router]);
+  }, [userRole, userId, router]);
+
+  // Usuarios únicos para el filtro
+  const uniqueUsers = [...new Map(
+    ventas.map((v) => [v.Usuarios.Nombre, v.Usuarios.Nombre])
+  ).values()];
+
+  // Filtrar por usuario
+  const filteredVentas = selectedUser
+    ? ventas.filter((v) => v.Usuarios.Nombre === selectedUser)
+    : ventas;
+
+  // Paginación
+  const totalPages = Math.ceil(filteredVentas.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const paginatedVentas = filteredVentas.slice(startIndex, startIndex + itemsPerPage);
+
+  const getPageNumbers = () => {
+    const pages = [];
+    const maxVisible = 5;
+    let start = Math.max(1, currentPage - Math.floor(maxVisible / 2));
+    let end = Math.min(totalPages, start + maxVisible - 1);
+    if (end - start + 1 < maxVisible) {
+      start = Math.max(1, end - maxVisible + 1);
+    }
+    for (let i = start; i <= end; i++) {
+      pages.push(i);
+    }
+    return pages;
+  };
 
   const verDetalle = async (venta) => {
     setSelectedVenta(venta);
@@ -151,7 +198,7 @@ export default function ListaVentas() {
   const handleDownloadReceipt = async (saleId) => {
     try {
       const response = await axios.get(`/api/generate_receipt/${saleId}`, {
-        responseType: "blob", // Important for downloading files
+        responseType: "blob",
       });
       const url = window.URL.createObjectURL(new Blob([response.data]));
       const link = document.createElement("a");
@@ -166,29 +213,142 @@ export default function ListaVentas() {
     }
   };
 
+  const handleExportExcel = async () => {
+    try {
+      setExporting(true);
+      const params = new URLSearchParams();
+      if (exportDesde) params.set("desde", exportDesde);
+      if (exportHasta) params.set("hasta", exportHasta);
+      if (exportUser) params.set("usuario", exportUser);
+
+      const res = await axios.get(`/api/ventas/exportar?${params.toString()}`, {
+        responseType: "blob",
+      });
+
+      const url = window.URL.createObjectURL(new Blob([res.data]));
+      const link = document.createElement("a");
+      link.href = url;
+
+      const disposition = res.headers["content-disposition"];
+      const filename = disposition
+        ? disposition.split("filename=")[1]?.replace(/"/g, "")
+        : "ventas.xlsx";
+      link.setAttribute("download", filename);
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error("Error al exportar:", error);
+      alert("Error al exportar las ventas.");
+    } finally {
+      setExporting(false);
+    }
+  };
+
   if (userRole === null) {
-    return <div>Cargando...</div>; // O un spinner de carga
+    return <div>Cargando...</div>;
   }
 
-  if (userRole !== 1 && userRole !== 2) {
-    return null; // No renderizar nada si no tiene permisos, ya se redirigió
+  if (userRole !== 1 && userRole !== 2 && userRole !== 3) {
+    return null;
   }
 
   return (
     <div className="container mx-auto px-4 py-8">
+      {/* Sección de exportar Excel — solo roles 1 y 2 */}
+      {(userRole === 1 || userRole === 2) && (
+      <div className="bg-white border border-gray-200 rounded-lg shadow-sm p-5 mb-6">
+        <h2 className="text-lg font-semibold text-gray-800 mb-3">📥 Exportar Ventas a Excel</h2>
+        <div className="flex flex-wrap items-end gap-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-600 mb-1">Desde</label>
+            <input
+              type="date"
+              value={exportDesde}
+              onChange={(e) => setExportDesde(e.target.value)}
+              className="border border-gray-300 rounded-md py-2 px-3 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-600 mb-1">Hasta</label>
+            <input
+              type="date"
+              value={exportHasta}
+              onChange={(e) => setExportHasta(e.target.value)}
+              className="border border-gray-300 rounded-md py-2 px-3 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-600 mb-1">Vendedor</label>
+            <select
+              value={exportUser}
+              onChange={(e) => setExportUser(e.target.value)}
+              className="border border-gray-300 rounded-md py-2 px-3 text-sm text-gray-700 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+            >
+              <option value="">Todos</option>
+              {uniqueUsers.map((name) => (
+                <option key={name} value={name}>{name}</option>
+              ))}
+            </select>
+          </div>
+          <button
+            onClick={handleExportExcel}
+            disabled={exporting}
+            className="bg-green-600 text-white py-2 px-5 rounded-md hover:bg-green-700 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed text-sm font-medium"
+          >
+            {exporting ? "Exportando..." : "Descargar Excel"}
+          </button>
+          {(exportDesde || exportHasta || exportUser) && (
+            <button
+              onClick={() => { setExportDesde(""); setExportHasta(""); setExportUser(""); }}
+              className="text-sm text-gray-500 hover:text-gray-700 underline"
+            >
+              Limpiar filtros
+            </button>
+          )}
+        </div>
+        {!exportDesde && !exportHasta && !exportUser && (
+          <p className="text-xs text-gray-400 mt-2">Sin filtros se descargará el historial completo.</p>
+        )}
+      </div>
+      )}
+
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-3xl font-bold text-gray-800">Listado de Ventas</h1>
-        <button
-          onClick={() => setViewMode(viewMode === "card" ? "table" : "card")}
-          className="bg-gray-200 text-gray-800 py-2 px-4 rounded-md hover:bg-gray-300 focus:outline-none"
-        >
-          {viewMode === "card" ? "Ver Tabla" : "Ver Tarjetas"}
-        </button>
+        <div className="flex items-center gap-3">
+          {(userRole === 1 || userRole === 2) && (
+            <select
+              value={selectedUser}
+              onChange={(e) => {
+                setSelectedUser(e.target.value);
+                setCurrentPage(1);
+              }}
+              className="border border-gray-300 rounded-md py-2 px-3 text-sm text-gray-700 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+            >
+              <option value="">Todos los usuarios</option>
+              {uniqueUsers.map((name) => (
+                <option key={name} value={name}>
+                  {name}
+                </option>
+              ))}
+            </select>
+          )}
+          <button
+            onClick={() => {
+              setViewMode(viewMode === "card" ? "table" : "card");
+              setCurrentPage(1);
+            }}
+            className="bg-gray-200 text-gray-800 py-2 px-4 rounded-md hover:bg-gray-300 focus:outline-none"
+          >
+            {viewMode === "card" ? "Ver Tabla" : "Ver Tarjetas"}
+          </button>
+        </div>
       </div>
 
       {viewMode === "card" ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {ventas.map((venta) => (
+          {paginatedVentas.map((venta) => (
             <div
               key={venta.Id_venta}
               className="bg-white rounded-lg shadow-md overflow-hidden transform hover:scale-105 transition-transform duration-300"
@@ -218,7 +378,7 @@ export default function ListaVentas() {
                   <p className="flex justify-between">
                     <strong>Total:</strong>{" "}
                     <span className="font-semibold">
-                      ${venta.Total_venta.toLocaleString()}
+                      ${venta.Total_venta.toLocaleString("es-CL")}
                     </span>
                   </p>
                   <p className="flex justify-between">
@@ -281,55 +441,108 @@ export default function ListaVentas() {
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
-              {ventas.map((venta) => (
-                <tr key={venta.Id_venta} className="hover:bg-gray-100">
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                    {venta.Id_venta}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    {new Date(venta.Fecha_venta).toLocaleString("es-CL", {
-                      dateStyle: "short",
-                      timeStyle: "short",
-                    })}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                    ${venta.Total_venta.toLocaleString()}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    {venta.Usuarios.Nombre}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    {venta.Medio_pagos.Nombre_pago}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <span
-                      className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                        venta.Id_estado_venta === 1
-                          ? "bg-green-100 text-green-800"
-                          : "bg-yellow-100 text-yellow-800"
-                      }`}
-                    >
-                      {venta.Id_estado_venta === 1 ? "Completada" : "Pendiente"}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                    <button
-                      onClick={() => verDetalle(venta)}
-                      className="text-indigo-600 hover:text-indigo-900 mr-4"
-                    >
-                      Ver Detalle
-                    </button>
-                    <button
-                      onClick={() => handleDownloadReceipt(venta.Id_venta)}
-                      className="text-green-600 hover:text-green-900"
-                    >
-                      Descargar
-                    </button>
+              {paginatedVentas.length > 0 ? (
+                paginatedVentas.map((venta) => (
+                  <tr key={venta.Id_venta} className="hover:bg-gray-100">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                      {venta.Id_venta}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                      {new Date(venta.Fecha_venta).toLocaleString("es-CL", {
+                        dateStyle: "short",
+                        timeStyle: "short",
+                      })}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                      ${venta.Total_venta.toLocaleString("es-CL")}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                      {venta.Usuarios.Nombre}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                      {venta.Medio_pagos.Nombre_pago}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <span
+                        className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
+                          venta.Id_estado_venta === 1
+                            ? "bg-green-100 text-green-800"
+                            : "bg-yellow-100 text-yellow-800"
+                        }`}
+                      >
+                        {venta.Id_estado_venta === 1 ? "Completada" : "Pendiente"}
+                      </span>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                      <button
+                        onClick={() => verDetalle(venta)}
+                        className="text-indigo-600 hover:text-indigo-900 mr-4"
+                      >
+                        Ver Detalle
+                      </button>
+                      <button
+                        onClick={() => handleDownloadReceipt(venta.Id_venta)}
+                        className="text-green-600 hover:text-green-900"
+                      >
+                        Descargar
+                      </button>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td
+                    colSpan={7}
+                    className="px-6 py-8 text-center text-sm text-gray-500"
+                  >
+                    No hay ventas registradas.
                   </td>
                 </tr>
-              ))}
+              )}
             </tbody>
           </table>
+        </div>
+      )}
+
+      {/* Paginación */}
+      {totalPages > 1 && (
+        <div className="flex items-center justify-between mt-4 px-2">
+          <p className="text-sm text-gray-600">
+            Mostrando {startIndex + 1}–
+            {Math.min(startIndex + itemsPerPage, filteredVentas.length)} de{" "}
+            {filteredVentas.length} venta{filteredVentas.length !== 1 ? "s" : ""}
+          </p>
+          <div className="flex items-center gap-1">
+            <button
+              onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+              disabled={currentPage === 1}
+              className="px-3 py-1 text-sm rounded-md border border-gray-300 bg-white text-gray-700 disabled:opacity-40 disabled:cursor-not-allowed hover:bg-gray-50"
+            >
+              Anterior
+            </button>
+            {getPageNumbers().map((page) => (
+              <button
+                key={page}
+                onClick={() => setCurrentPage(page)}
+                className={`px-3 py-1 text-sm rounded-md border ${
+                  currentPage === page
+                    ? "bg-indigo-600 text-white border-indigo-600"
+                    : "bg-white text-gray-700 border-gray-300 hover:bg-gray-50"
+                }`}
+              >
+                {page}
+              </button>
+            ))}
+            <button
+              onClick={() =>
+                setCurrentPage((p) => Math.min(totalPages, p + 1))
+              }
+              disabled={currentPage === totalPages}
+              className="px-3 py-1 text-sm rounded-md border border-gray-300 bg-white text-gray-700 disabled:opacity-40 disabled:cursor-not-allowed hover:bg-gray-50"
+            >
+              Siguiente
+            </button>
+          </div>
         </div>
       )}
 

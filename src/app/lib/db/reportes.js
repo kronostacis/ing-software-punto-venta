@@ -1,30 +1,48 @@
 import prisma from "@/app/lib/prisma";
-import { format } from "date-fns";
 
-// ventas diarias
-export async function obtenerVentasDiarias() {
-  const ventas = await prisma.ventas.groupBy({
-    by: ["Fecha_venta"],
-    _sum: { Total_venta: true },
-    orderBy: { Fecha_venta: "asc" },
-  });
+// ventas diarias (días de un mes/año específico)
+export async function obtenerVentasDiarias(month, year) {
+  const result = await prisma.$queryRawUnsafe(`
+    SELECT DAY(Fecha_venta) AS Dia,
+           SUM(Total_venta) AS Total
+    FROM Ventas
+    WHERE YEAR(Fecha_venta) = ${year}
+      AND MONTH(Fecha_venta) = ${month}
+    GROUP BY DAY(Fecha_venta)
+    ORDER BY Dia;
+  `);
 
-  return ventas.map(v => ({
-    fecha: format(v.Fecha_venta, "yyyy-MM-dd"),
-    total: Number(v._sum.Total_venta ?? 0),
+  const map = new Map(result.map(r => [Number(r.Dia), Number(r.Total)]));
+  const daysInMonth = new Date(year, month, 0).getDate();
+
+  return Array.from({ length: daysInMonth }, (_, i) => ({
+    fecha: `${i + 1}`,
+    total: map.get(i + 1) || 0,
   }));
 }
 
-// Ventas mensuales
-export async function obtenerVentasMensuales() {
+// Ventas mensuales (12 meses de un año específico)
+export async function obtenerVentasMensuales(year) {
   const result = await prisma.$queryRawUnsafe(`
-    SELECT DATE_FORMAT(Fecha_venta, '%Y-%m') AS Mes, 
+    SELECT MONTH(Fecha_venta) AS Mes,
            SUM(Total_venta) AS Total
     FROM Ventas
-    GROUP BY Mes
+    WHERE YEAR(Fecha_venta) = ${year}
+    GROUP BY MONTH(Fecha_venta)
     ORDER BY Mes;
   `);
-  return result.map(r => ({ Mes: r.Mes, Total: Number(r.Total) }));
+
+  const map = new Map(result.map(r => [Number(r.Mes), Number(r.Total)]));
+
+  const meses = [
+    "Ene", "Feb", "Mar", "Abr", "May", "Jun",
+    "Jul", "Ago", "Sep", "Oct", "Nov", "Dic",
+  ];
+
+  return meses.map((nombre, i) => ({
+    Mes: nombre,
+    Total: map.get(i + 1) || 0,
+  }));
 }
 
 // Ventas por medio de pago

@@ -257,7 +257,7 @@ export default function ViewLotes() {
                   {lote.Id_producto}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                  ${lote.Precio_compra.toLocaleString()}
+                  ${lote.Precio_compra.toLocaleString("es-CL")}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                   {lote.Cantidad}
