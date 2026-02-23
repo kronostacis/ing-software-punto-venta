@@ -259,7 +259,7 @@ export default function ListaVentas() {
       {/* Sección de exportar Excel — solo roles 1 y 2 */}
       {(userRole === 1 || userRole === 2) && (
       <div className="bg-white border border-gray-200 rounded-lg shadow-sm p-5 mb-6">
-        <h2 className="text-lg font-semibold text-gray-800 mb-3">📥 Exportar Ventas a Excel</h2>
+        <h2 className="text-lg font-semibold text-gray-800 mb-3">📥 Exportar Ventas</h2>
         <div className="flex flex-wrap items-end gap-4">
           <div>
             <label className="block text-sm font-medium text-gray-600 mb-1">Desde</label>
@@ -297,7 +297,7 @@ export default function ListaVentas() {
             disabled={exporting}
             className="bg-green-600 text-white py-2 px-5 rounded-md hover:bg-green-700 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed text-sm font-medium"
           >
-            {exporting ? "Exportando..." : "Descargar Excel"}
+            {exporting ? "Exportando..." : "Descargar CSV"}
           </button>
           {(exportDesde || exportHasta || exportUser) && (
             <button
