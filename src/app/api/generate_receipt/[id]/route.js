@@ -5,7 +5,7 @@ import { jsPDF } from "jspdf";
 export async function GET(request, { params }) {
   try {
     const { id } = params;
-    const saleId = parseInt(id);
+    const saleId = Number.parseInt(id);
 
     // Fetch sale data
     const sale = await getSaleById(saleId);
@@ -27,7 +27,7 @@ export async function GET(request, { params }) {
     doc.text("Comprobante de Venta", 105, 20, null, null, "center");
     doc.setFontSize(10);
     doc.text(
-      `Fecha de Emisión: ${new Date().toLocaleDateString()}`,
+      `Fecha de Emisión: ${new Date().toLocaleDateString("es-CL", { timeZone: "America/Santiago" })}`,
       105,
       28,
       null,
@@ -39,7 +39,7 @@ export async function GET(request, { params }) {
     doc.setFontSize(12);
     doc.text(`ID Venta: ${sale.Id_venta}`, 20, 45);
     doc.text(
-      `Fecha: ${new Date(sale.Fecha_venta).toLocaleDateString()}`,
+      `Fecha: ${new Date(sale.Fecha_venta).toLocaleDateString("es-CL", { timeZone: "America/Santiago" })}`,
       20,
       55
     );

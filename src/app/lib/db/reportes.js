@@ -2,19 +2,37 @@ import prisma from "@/app/lib/prisma";
 
 // ventas diarias (días de un mes/año específico)
 export async function obtenerVentasDiarias(month, year) {
-  const result = await prisma.$queryRawUnsafe(`
-    SELECT DAY(Fecha_venta) AS Dia,
-           SUM(Total_venta) AS Total
-    FROM Ventas
-    WHERE YEAR(Fecha_venta) = ${year}
-      AND MONTH(Fecha_venta) = ${month}
-    GROUP BY DAY(Fecha_venta)
-    ORDER BY Dia;
-  `);
+  // Fetch with a margin to account for timezone differences (UTC vs Santiago)
+  const startDate = new Date(Date.UTC(year, month - 1, -3));
+  const endDate = new Date(Date.UTC(year, month, 3));
 
-  const map = new Map(result.map(r => [Number(r.Dia), Number(r.Total)]));
+  const ventas = await prisma.ventas.findMany({
+    where: {
+      Fecha_venta: {
+        gte: startDate,
+        lte: endDate,
+      },
+    },
+    select: { Fecha_venta: true, Total_venta: true },
+  });
+
+  const map = new Map();
+  for (const venta of ventas) {
+    // Convert to YYYY-MM-DD strictly in Chilean time
+    const dString = new Date(venta.Fecha_venta).toLocaleString("en-CA", {
+      timeZone: "America/Santiago",
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+    });
+    const [vYear, vMonth, vDay] = dString.split("-").map(Number);
+
+    if (vYear === year && vMonth === month) {
+      map.set(vDay, (map.get(vDay) || 0) + Number(venta.Total_venta));
+    }
+  }
+
   const daysInMonth = new Date(year, month, 0).getDate();
-
   return Array.from({ length: daysInMonth }, (_, i) => ({
     fecha: `${i + 1}`,
     total: map.get(i + 1) || 0,
@@ -23,16 +41,34 @@ export async function obtenerVentasDiarias(month, year) {
 
 // Ventas mensuales (12 meses de un año específico)
 export async function obtenerVentasMensuales(year) {
-  const result = await prisma.$queryRawUnsafe(`
-    SELECT MONTH(Fecha_venta) AS Mes,
-           SUM(Total_venta) AS Total
-    FROM Ventas
-    WHERE YEAR(Fecha_venta) = ${year}
-    GROUP BY MONTH(Fecha_venta)
-    ORDER BY Mes;
-  `);
+  // Fetch with a margin to account for timezone differences
+  const startDate = new Date(Date.UTC(year, 0, -5));
+  const endDate = new Date(Date.UTC(year + 1, 0, 5));
 
-  const map = new Map(result.map(r => [Number(r.Mes), Number(r.Total)]));
+  const ventas = await prisma.ventas.findMany({
+    where: {
+      Fecha_venta: {
+        gte: startDate,
+        lte: endDate,
+      },
+    },
+    select: { Fecha_venta: true, Total_venta: true },
+  });
+
+  const map = new Map();
+  for (const venta of ventas) {
+    const dString = new Date(venta.Fecha_venta).toLocaleString("en-CA", {
+      timeZone: "America/Santiago",
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+    });
+    const [vYear, vMonth] = dString.split("-").map(Number);
+
+    if (vYear === year) {
+      map.set(vMonth, (map.get(vMonth) || 0) + Number(venta.Total_venta));
+    }
+  }
 
   const meses = [
     "Ene", "Feb", "Mar", "Abr", "May", "Jun",

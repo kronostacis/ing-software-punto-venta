@@ -42,6 +42,7 @@ export async function GET(request) {
 
     for (const venta of ventas) {
       const fecha = new Date(venta.Fecha_venta).toLocaleString("es-CL", {
+        timeZone: "America/Santiago",
         dateStyle: "short",
         timeStyle: "short",
       });

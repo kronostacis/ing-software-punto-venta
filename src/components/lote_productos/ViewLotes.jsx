@@ -266,7 +266,7 @@ export default function ViewLotes() {
                   {lote.Stock}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                  {new Date(lote.Fecha).toLocaleDateString()}
+                  {new Date(lote.Fecha).toLocaleDateString("es-CL", { timeZone: "America/Santiago" })}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-4">
                   <a

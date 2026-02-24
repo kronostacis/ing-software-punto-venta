@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 
 // Modal para mostrar el detalle de la venta
-function DetalleVentaModal({ venta, detalle, onClose }) {
+function DetalleVentaModal({ venta, detalle, onClose, userRole }) {
   if (!venta || !detalle) return null;
 
   return (
@@ -26,6 +26,7 @@ function DetalleVentaModal({ venta, detalle, onClose }) {
           <p>
             <strong>Fecha:</strong>{" "}
             {new Date(venta.Fecha_venta).toLocaleString("es-CL", {
+              timeZone: "America/Santiago",
               dateStyle: "long",
               timeStyle: "short",
             })}
@@ -36,18 +37,21 @@ function DetalleVentaModal({ venta, detalle, onClose }) {
               ${venta.Total_venta.toLocaleString("es-CL")}
             </span>
           </p>
-          <p>
-            <strong>Utilidad:</strong>{" "}
-            <span className="font-semibold text-blue-600">
-              ${venta.Utilidad_total.toLocaleString("es-CL")}
-            </span>
-          </p>
+
           <p>
             <strong>Atendido por:</strong> {venta.Usuarios.Nombre}
           </p>
           <p>
             <strong>Medio de Pago:</strong> {venta.Medio_pagos.Nombre_pago}
           </p>
+          {(userRole === 1 || userRole === 2) && venta.Utilidad_total !== undefined && (
+            <p>
+              <strong>Utilidad:</strong>{" "}
+              <span className="font-semibold text-lg text-blue-600">
+                ${venta.Utilidad_total.toLocaleString("es-CL")}
+              </span>
+            </p>
+          )}
         </div>
 
         <div className="mt-6 border-t pt-4">
@@ -101,11 +105,7 @@ export default function ListaVentas() {
   const [selectedUser, setSelectedUser] = useState("");
   const itemsPerPage = 10;
 
-  // Export states
-  const [exportDesde, setExportDesde] = useState("");
-  const [exportHasta, setExportHasta] = useState("");
-  const [exportUser, setExportUser] = useState("");
-  const [exporting, setExporting] = useState(false);
+
   const router = useRouter();
   const [userRole, setUserRole] = useState(null);
   const [userId, setUserId] = useState(null);
@@ -215,34 +215,30 @@ export default function ListaVentas() {
 
   const handleExportExcel = async () => {
     try {
-      setExporting(true);
-      const params = new URLSearchParams();
-      if (exportDesde) params.set("desde", exportDesde);
-      if (exportHasta) params.set("hasta", exportHasta);
-      if (exportUser) params.set("usuario", exportUser);
-
-      const res = await axios.get(`/api/ventas/exportar?${params.toString()}`, {
+      const url = new URL("/api/ventas/exportar", window.location.origin);
+      if (selectedUser) {
+        url.searchParams.append("usuario", selectedUser);
+      }
+      
+      const response = await axios.get(url.toString(), {
         responseType: "blob",
       });
-
-      const url = window.URL.createObjectURL(new Blob([res.data]));
+      const blobUrl = window.URL.createObjectURL(new Blob([response.data]));
       const link = document.createElement("a");
-      link.href = url;
-
-      const disposition = res.headers["content-disposition"];
-      const filename = disposition
-        ? disposition.split("filename=")[1]?.replace(/"/g, "")
-        : "ventas.xlsx";
+      link.href = blobUrl;
+      const contentDisposition = response.headers["content-disposition"];
+      let filename = "ventas.csv";
+      if (contentDisposition) {
+        const match = contentDisposition.match(/filename="(.+)"/);
+        if (match && match.length === 2) filename = match[1];
+      }
       link.setAttribute("download", filename);
       document.body.appendChild(link);
       link.click();
       link.remove();
-      window.URL.revokeObjectURL(url);
     } catch (error) {
-      console.error("Error al exportar:", error);
-      alert("Error al exportar las ventas.");
-    } finally {
-      setExporting(false);
+      console.error("Error downloading excel:", error);
+      alert("Error al descargar el Excel.");
     }
   };
 
@@ -256,63 +252,7 @@ export default function ListaVentas() {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      {/* Sección de exportar Excel — solo roles 1 y 2 */}
-      {(userRole === 1 || userRole === 2) && (
-      <div className="bg-white border border-gray-200 rounded-lg shadow-sm p-5 mb-6">
-        <h2 className="text-lg font-semibold text-gray-800 mb-3">📥 Exportar Ventas</h2>
-        <div className="flex flex-wrap items-end gap-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-600 mb-1">Desde</label>
-            <input
-              type="date"
-              value={exportDesde}
-              onChange={(e) => setExportDesde(e.target.value)}
-              className="border border-gray-300 rounded-md py-2 px-3 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-600 mb-1">Hasta</label>
-            <input
-              type="date"
-              value={exportHasta}
-              onChange={(e) => setExportHasta(e.target.value)}
-              className="border border-gray-300 rounded-md py-2 px-3 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-600 mb-1">Vendedor</label>
-            <select
-              value={exportUser}
-              onChange={(e) => setExportUser(e.target.value)}
-              className="border border-gray-300 rounded-md py-2 px-3 text-sm text-gray-700 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-            >
-              <option value="">Todos</option>
-              {uniqueUsers.map((name) => (
-                <option key={name} value={name}>{name}</option>
-              ))}
-            </select>
-          </div>
-          <button
-            onClick={handleExportExcel}
-            disabled={exporting}
-            className="bg-green-600 text-white py-2 px-5 rounded-md hover:bg-green-700 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed text-sm font-medium"
-          >
-            {exporting ? "Exportando..." : "Descargar CSV"}
-          </button>
-          {(exportDesde || exportHasta || exportUser) && (
-            <button
-              onClick={() => { setExportDesde(""); setExportHasta(""); setExportUser(""); }}
-              className="text-sm text-gray-500 hover:text-gray-700 underline"
-            >
-              Limpiar filtros
-            </button>
-          )}
-        </div>
-        {!exportDesde && !exportHasta && !exportUser && (
-          <p className="text-xs text-gray-400 mt-2">Sin filtros se descargará el historial completo.</p>
-        )}
-      </div>
-      )}
+
 
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-3xl font-bold text-gray-800">Listado de Ventas</h1>
@@ -333,6 +273,17 @@ export default function ListaVentas() {
                 </option>
               ))}
             </select>
+          )}
+          {(userRole === 1 || userRole === 2) && (
+            <button
+              onClick={handleExportExcel}
+              className="bg-green-600 text-white flex items-center gap-2 py-2 px-4 rounded-md hover:bg-green-700 focus:outline-none"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                <path fillRule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clipRule="evenodd" />
+              </svg>
+              Excel
+            </button>
           )}
           <button
             onClick={() => {
@@ -370,6 +321,7 @@ export default function ListaVentas() {
                 </div>
                 <p className="text-sm text-gray-500 mt-1">
                   {new Date(venta.Fecha_venta).toLocaleString("es-CL", {
+                    timeZone: "America/Santiago",
                     dateStyle: "long",
                     timeStyle: "short",
                   })}
@@ -401,12 +353,14 @@ export default function ListaVentas() {
                   >
                     Ver Detalle
                   </button>
-                  <button
-                    onClick={() => handleDownloadReceipt(venta.Id_venta)}
-                    className="flex-1 bg-green-600 text-white py-2 rounded-md hover:bg-green-700 focus:outline-none"
-                  >
-                    Descargar Comprobante
-                  </button>
+                  {(userRole === 1 || userRole === 2) && (
+                    <button
+                      onClick={() => handleDownloadReceipt(venta.Id_venta)}
+                      className="flex-1 bg-green-600 text-white py-2 rounded-md hover:bg-green-700 focus:outline-none"
+                    >
+                      Descargar Comprobante
+                    </button>
+                  )}
                 </div>
               </div>
             </div>
@@ -449,6 +403,7 @@ export default function ListaVentas() {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                       {new Date(venta.Fecha_venta).toLocaleString("es-CL", {
+                        timeZone: "America/Santiago",
                         dateStyle: "short",
                         timeStyle: "short",
                       })}
@@ -480,12 +435,14 @@ export default function ListaVentas() {
                       >
                         Ver Detalle
                       </button>
-                      <button
-                        onClick={() => handleDownloadReceipt(venta.Id_venta)}
-                        className="text-green-600 hover:text-green-900"
-                      >
-                        Descargar
-                      </button>
+                      {(userRole === 1 || userRole === 2) && (
+                        <button
+                          onClick={() => handleDownloadReceipt(venta.Id_venta)}
+                          className="text-green-600 hover:text-green-900"
+                        >
+                          Descargar
+                        </button>
+                      )}
                     </td>
                   </tr>
                 ))
@@ -551,6 +508,7 @@ export default function ListaVentas() {
           venta={selectedVenta}
           detalle={detalle}
           onClose={closeModal}
+          userRole={userRole}
         />
       )}
     </div>

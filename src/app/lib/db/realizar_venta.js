@@ -36,6 +36,15 @@ export async function newSale(data) {
 
   const nuevoId = ultimo ? ultimo.Id_venta + 1 : 1;
 
+  const formatter = new Intl.DateTimeFormat("en-US", {
+    timeZone: "America/Santiago",
+    year: "numeric", month: "2-digit", day: "2-digit",
+    hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: false
+  });
+  const parts = formatter.formatToParts(new Date());
+  const p = {}; parts.forEach(part => p[part.type] = part.value);
+  const chileDateAsUTC = new Date(`${p.year}-${p.month}-${p.day}T${p.hour}:${p.minute}:${p.second}.000Z`);
+
   const venta = await prisma.ventas.create({
     data: {
       Id_venta: nuevoId,
@@ -44,6 +53,7 @@ export async function newSale(data) {
       Id_usuario,
       Utilidad_total,
       Id_estado_venta,
+      Fecha_venta: chileDateAsUTC,
     },
   });
 
@@ -91,8 +101,6 @@ export async function getAllLoteByProduct(id) {
 
 export async function updateStockByLoteId(id, data) {
   try {
-    const { Stock } =
-      data;
     const lote = await prisma.lote_productos.update({
       where: { Id_lote: id },
       data: {
@@ -101,8 +109,8 @@ export async function updateStockByLoteId(id, data) {
     });
 
     return { success: true, lote: lote };
-  } catch (errors) {
-    console.log(errors);
+  } catch (error_) {
+    console.log(error_);
     return { success: false, message: "No se pudo actualizar el Stock." };
   }
 }
