@@ -191,14 +191,26 @@ export default function ViewProductos({ userRole }) {
         <h1 className="text-3xl font-bold text-gray-800">
           Gestión de Productos
         </h1>
-        {userRole !== 3 && (
+        <div className="flex items-center gap-3">
           <button
-            onClick={() => setIsModalOpen(true)}
-            className="bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 focus:outline-none"
+            onClick={() => {
+              const link = document.createElement("a");
+              link.href = "/api/productos/exportar";
+              link.click();
+            }}
+            className="bg-green-600 text-white py-2 px-4 rounded-md hover:bg-green-700 focus:outline-none text-sm font-medium"
           >
-            Agregar Producto
+            📥 Descargar CSV
           </button>
+          {userRole !== 3 && (
+            <button
+              onClick={() => setIsModalOpen(true)}
+              className="bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 focus:outline-none"
+            >
+              Agregar Producto
+            </button>
         )}
+        </div>
       </div>
 
       <CreateProductModal
